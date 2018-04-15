@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" prefHeight="230.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.AddProductController">
+   <children>
+      <Label text="Add product to database">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <TextField fx:id="productName" alignment="CENTER" maxWidth="150.0" promptText="Product name" />
+      <TextField fx:id="productDesc" alignment="CENTER" maxWidth="150.0" promptText="Description" />
+      <TextField fx:id="productPrice" alignment="CENTER" maxWidth="150.0" promptText="Price" />
+      <TextField fx:id="productCategory" alignment="CENTER" maxWidth="150.0" promptText="Category Id" />
+      <Button fx:id="productAdd" mnemonicParsing="false" onAction="#addProduct" text="Submit" />
+   </children>
+</VBox>

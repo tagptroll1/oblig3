@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.StartpageXml">
+   <children>
+      <ButtonBar layoutX="30.0" layoutY="-85.0" prefHeight="40.0" prefWidth="200.0" />
+      <VBox alignment="TOP_CENTER" layoutX="14.0" layoutY="34.0" prefHeight="166.0" prefWidth="100.0" spacing="2.0">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Add to table" />
+            <Button fx:id="btn_customer" contentDisplay="TOP" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#openAddCustomer" prefHeight="25.0" text="Customer" VBox.vgrow="ALWAYS" />
+            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#openAddCategory" prefHeight="25.0" text="Category" VBox.vgrow="ALWAYS" />
+            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#openAddAddress" prefHeight="25.0" text="Address" VBox.vgrow="ALWAYS" />
+            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#openAddInvoice" prefHeight="25.0" text="Invoice" VBox.vgrow="ALWAYS" />
+            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#openAddInvoiceItem" prefHeight="25.0" text="Invoice Item" VBox.vgrow="ALWAYS" />
+            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#openAddProduct" prefHeight="25.0" text="Product" VBox.vgrow="ALWAYS" />
+         </children>
+      </VBox>
+      <MenuBar layoutY="4.0" prefHeight="0.0" prefWidth="600.0" AnchorPane.topAnchor="0.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+       <Button fx:id="btnFaktura" layoutX="14.0" layoutY="233.0" mnemonicParsing="false" onAction="#openFaktura" prefWidth="100.0" text="Show Faktura" />
+       <Button fx:id="btnDb" layoutX="14.0" layoutY="260.0" mnemonicParsing="false" onAction="#openDb" prefWidth="100.0" text="Show Database" />
+   </children>
+</AnchorPane>

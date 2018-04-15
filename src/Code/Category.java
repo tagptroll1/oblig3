@@ -1,13 +1,20 @@
 package Code;
-/**
- * Class representing a given user
- */
-public class User {
+
+public class Category {
+    // TODO User SimpleXProperty
     private int id;
     private String name;
-    private String email;
 
-    // GETTERS AND SETTERS:
+    public Category(){}
+
+    public Category(String name){
+        this.id = -1;
+        this.name = name;
+    }
+    public Category(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     public int getId() {
         return id;
@@ -23,13 +30,5 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 }

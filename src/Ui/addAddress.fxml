@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" prefHeight="230.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.AddAddressController">
+   <children>
+      <Label text="Add address to database">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <TextField fx:id="addressStreetNumber" alignment="CENTER" maxWidth="150.0" promptText="Street number" />
+      <TextField fx:id="addressStreetName" alignment="CENTER" maxWidth="150.0" promptText="Street name" />
+      <TextField fx:id="addressPostalCode" alignment="CENTER" maxWidth="150.0" promptText="Postal code" />
+      <TextField fx:id="addressPostalTown" alignment="CENTER" maxWidth="150.0" promptText="Postal town" />
+      <Button fx:id="addressAdd" mnemonicParsing="false" onAction="#addAddress" text="Submit" />
+   </children>
+</VBox>

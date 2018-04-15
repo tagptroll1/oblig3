@@ -1,7 +1,8 @@
 package Interface;
 
-import Code.User;
+import Code.Customer;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -9,28 +10,29 @@ import java.util.List;
  */
 public interface CustomerDAOIF {
     /**
-     * Inserts a given user into db
-     * @param user object to insert
+     * Inserts a given customer into db
+     * @param customer object to insert
      */
-    public void addUser(User user);
+    void addUser(Customer customer) throws SQLException;
 
     /**
      * Fetches a given user from db by id
      * @param id of user to get
-     * @return User object of user with given id
+     * @return Customer object of user with given id
      */
-    public User getUserById(int id);
+    Customer getUserById(int id) throws SQLException;
 
     /**
-     * Receives a given user object and deletes the user
+     * Receives a given customer object and deletes the customer
      * from db. (hint: du kan bruke brukerens id i delete query)
-     * @param user to delete
+     * @param customer to delete
      */
-    public void deleteUser(User user);
+    void deleteUser(Customer customer) throws SQLException;
 
     /**
      * Fetches all users in db
      * @return list of all users in db
      */
-    public List<User> getAllUsers();
+    //TODO return observableList
+    List<Customer> getAllUsers() throws SQLException;
 }

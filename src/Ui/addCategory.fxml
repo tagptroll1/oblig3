@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.AddCategoryController">
+   <children>
+      <Label text="Add category to database">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+         <VBox.margin>
+            <Insets top="50.0" />
+         </VBox.margin>
+      </Label>
+      <TextField fx:id="categoryName" alignment="CENTER" layoutX="255.0" layoutY="10.0" maxWidth="150.0" promptText="Category name" />
+      <Button fx:id="addCategory" mnemonicParsing="false" text="Submit" onAction="#addCategory"/>
+   </children>
+</VBox>
