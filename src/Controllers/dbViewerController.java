@@ -4,15 +4,36 @@ import Code.*;
 import DAOs.*;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
-public class dbViewerController {
+import java.util.ResourceBundle;
+
+public class dbViewerController implements Initializable {
     @FXML private AnchorPane anchorPane;
+
+    /**
+     * Called to initialize a controller after its root element has been
+     * completely processed.
+     *
+     * @param location  The location used to resolve relative paths for the root object, or
+     *                  {@code null} if the location is not known.
+     * @param resources The resources used to localize the root object, or {@code null} if
+     */
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        try {
+            dbGoAddress();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     private int currentPage = 1;
 

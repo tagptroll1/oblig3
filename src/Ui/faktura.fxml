@@ -12,9 +12,9 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="900.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.FakturaController">
+<VBox prefHeight="840.0" prefWidth="601.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.FakturaController">
   <children>
-      <AnchorPane prefHeight="900.0" prefWidth="600.0" >
+      <AnchorPane prefHeight="752.0" prefWidth="601.0">
          <children>
             <Label layoutX="423.0" layoutY="36.0" text="Faktura" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="40.0">
                <font>
@@ -42,9 +42,9 @@
             <Label layoutX="41.0" layoutY="286.0" style="-fx-font-weight: BOLD;" text="Items to purchase:" />
             <Label layoutX="409.0" layoutY="286.0" style="-fx-font-weight: BOLD;" text="MVA sats" />
             <Label layoutX="486.0" layoutY="286.0" style="-fx-font-weight: BOLD;" text="Netto Price" />
-            <VBox fx:id="itemsBox" alignment="TOP_LEFT" layoutX="43.0" layoutY="320.0" prefHeight="98.0" prefWidth="350.0" AnchorPane.leftAnchor="43.0"></VBox>
-            <VBox fx:id="itemsMVA" alignment="TOP_CENTER" layoutX="398.0" layoutY="320.0" prefHeight="98.0" prefWidth="78.0" AnchorPane.rightAnchor="125.0"></VBox>
-            <VBox fx:id="itemsPrice" alignment="TOP_RIGHT" layoutX="460.0" layoutY="320.0" prefHeight="98.0" prefWidth="78.0" AnchorPane.rightAnchor="50.0"></VBox>
+            <VBox fx:id="itemsBox" alignment="TOP_LEFT" layoutX="43.0" layoutY="320.0" prefHeight="98.0" prefWidth="350.0" AnchorPane.leftAnchor="43.0" />
+            <VBox fx:id="itemsMVA" alignment="TOP_CENTER" layoutX="398.0" layoutY="320.0" prefHeight="98.0" prefWidth="78.0" AnchorPane.rightAnchor="125.0" />
+            <VBox fx:id="itemsPrice" alignment="TOP_RIGHT" layoutX="460.0" layoutY="320.0" prefHeight="98.0" prefWidth="78.0" AnchorPane.rightAnchor="50.0" />
             <GridPane layoutX="422.0" layoutY="427.0" prefHeight="27.0" prefWidth="112.0">
               <columnConstraints>
                 <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -57,8 +57,8 @@
                <children>
                   <Label text="MVA:" />
                   <Label text="Total:" GridPane.rowIndex="1" />
-                  <Label text="100,00" GridPane.columnIndex="1" fx:id="gridMVA" />
-                  <Label text="500,00" GridPane.columnIndex="1" GridPane.rowIndex="1" fx:id="gridTotal" />
+                  <Label fx:id="gridMVA" text="100,00" GridPane.columnIndex="1" />
+                  <Label fx:id="gridTotal" text="500,00" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                </children>
             </GridPane>
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffff60" height="60.0" layoutY="468.0" stroke="BLACK" strokeType="INSIDE" width="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
@@ -111,7 +111,7 @@
             </GridPane>
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffff66" height="97.0" layoutX="7.0" layoutY="766.0" stroke="BLACK" strokeType="INSIDE" width="600.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="53.0" layoutX="-3.0" layoutY="796.0" stroke="BLACK" strokeType="INSIDE" width="600.0" AnchorPane.bottomAnchor="51.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-            <HBox layoutX="113.0" layoutY="766.0" prefHeight="21.0" prefWidth="222.0" spacing="2.0" AnchorPane.bottomAnchor="113.0" fx:id="a_digits">
+            <HBox fx:id="a_digits" layoutX="113.0" layoutY="766.0" prefHeight="21.0" prefWidth="222.0" spacing="2.0" AnchorPane.bottomAnchor="113.0">
                <children>
                   <Pane prefHeight="21.0" prefWidth="200.0">
                      <children>

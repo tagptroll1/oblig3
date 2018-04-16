@@ -1,6 +1,7 @@
 package DAOs;
 
 import Interface.ConnectionDAOIF;
+import javafx.scene.Cursor;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -22,23 +23,22 @@ public class ConnectionDAO implements ConnectionDAOIF {
     }
 
     private void checkDB() throws FileNotFoundException, SQLException {
-        if (con == null){
-            try {
-                Class.forName("org.sqlite.JDBC");
-                String url = "jdbc:sqlite:oblig3.sqlite";
-                con = DriverManager.getConnection(url);
-                System.out.println("Connected to db");
-            } catch (SQLException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-        // TODO Over lager filen, så det under vil aldri kjøre...
-        Statement state1 = con.createStatement();
-        ResultSet addressResult = state1.executeQuery("SELECT name FROM sqlite_master WHERE  type='table' AND  name='address';");
 
         File db = new File("oblig3.sqlite");
-        if (db.exists() && addressResult.next()){
+        if (db.exists() && db.isFile()) {
             return;
+        }
+        checkCon();
+        Statement state1 = con.createStatement();
+        try {
+            ResultSet rs = state1.executeQuery("SELECT COUNT(*) FROM address");
+            if (rs.getInt(1) != 0) {
+                System.out.println("skipped making db");
+                return;
+            }
+        } catch (SQLException e){
+            System.out.println("I make db now");
+            //return;
         }
 
         Statement state = con.createStatement();
@@ -53,6 +53,19 @@ public class ConnectionDAO implements ConnectionDAOIF {
         }
     }
 
+    private void checkCon(){
+        if (con == null){
+            try {
+                Class.forName("org.sqlite.JDBC");
+                String url = "jdbc:sqlite:oblig3.sqlite";
+                con = DriverManager.getConnection(url);
+                System.out.println("Connected to db");
+            } catch (SQLException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     @Override
     public java.sql.Connection getConnection(){
         try {
@@ -60,6 +73,7 @@ public class ConnectionDAO implements ConnectionDAOIF {
         } catch (FileNotFoundException | SQLException e) {
             e.printStackTrace();
         }
+        checkCon();
 
         return con;
     }

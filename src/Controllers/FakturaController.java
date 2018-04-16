@@ -47,6 +47,7 @@ public class FakturaController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {}
 
+    @FXML
     public void setValues(Invoice faktura){
         double totalPrice = round(faktura.getTotal(),2);
 

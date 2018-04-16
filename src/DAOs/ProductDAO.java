@@ -51,7 +51,7 @@ public class ProductDAO implements ProductDAOIF {
         ResultSet result = state.executeQuery(sql);
         // sjekk at den fikk noe
         result.next();
-        if (result.getRow()==0) throw new QueryError("No result found within category table with id: "+id);
+        if (result.getRow()==0) throw new QueryError("No result found within product table with id: "+id);
 
         Category category = CategoryDAO.getInstance().getCategoryById(result.getInt("category"));
         Item item = new Item(

@@ -4,6 +4,7 @@ import Code.Invoice;
 import Code.Item;
 import DAOs.InvoiceDAO;
 import DAOs.ProductDAO;
+import Errors.QueryError;
 import Stages.*;
 import javafx.event.ActionEvent;
 
@@ -26,7 +27,7 @@ public class StartpageXml {
             Item bItem = ProductDAO.getInstance().getProductById(2);
             faktura.addItem(aItem);
             faktura.addItem(bItem);
-        } catch (SQLException e1) {
+        } catch (SQLException | QueryError e1) {
             e1.printStackTrace();
         }
 
@@ -43,27 +44,27 @@ public class StartpageXml {
        db.display();
     }
 
-    public void openAddCustomer(ActionEvent e) throws IOException {
+    public void openAddCustomer() throws IOException {
         AddCustomerWindow customerWindow = new AddCustomerWindow();
         customerWindow.display();
     }
-    public void openAddCategory(ActionEvent e) throws IOException {
+    public void openAddCategory() throws IOException {
         AddCategoryWindow categoryWindow = new AddCategoryWindow();
         categoryWindow.display();
     }
-    public void openAddAddress(ActionEvent e) throws IOException {
+    public void openAddAddress() throws IOException {
         AddAddressWindow addressWindow = new AddAddressWindow();
         addressWindow.display();
     }
-    public void openAddInvoice(ActionEvent e) throws IOException {
+    public void openAddInvoice() throws IOException {
         AddInvoiceWindow invoiceWindow = new AddInvoiceWindow();
         invoiceWindow.display();
     }
-    public void openAddInvoiceItem(ActionEvent e) throws IOException {
+    public void openAddInvoiceItem() throws IOException {
         AddInvoiceItemWindow invoiceItemWindow = new AddInvoiceItemWindow();
         invoiceItemWindow.display();
     }
-    public void openAddProduct(ActionEvent e) throws IOException {
+    public void openAddProduct() throws IOException {
         AddProductWindow productWindow = new AddProductWindow();
         productWindow.display();
     }

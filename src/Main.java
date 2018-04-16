@@ -1,8 +1,10 @@
 import Code.Address;
 import Code.Customer;
+import Code.Invoice;
 import DAOs.AddressDAO;
 import DAOs.ConnectionDAO;
 import DAOs.CustomerDAO;
+import DAOs.InvoiceDAO;
 import javafx.fxml.FXMLLoader;
 import javafx.application.Application;
 import javafx.scene.Parent;
@@ -34,6 +36,11 @@ public class Main extends Application{
         List<Customer> customers = UDAO.getAllUsers();
         for (Customer u : customers){
             System.out.println(u.getName());
+        }
+
+        List<Invoice> invoices = InvoiceDAO.getInstance().getAllInvoices();
+        for (Invoice i : invoices){
+            System.out.println(i.getCustomer().getName());
         }
 
         launch(args);

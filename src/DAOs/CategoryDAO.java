@@ -96,7 +96,7 @@ public class CategoryDAO implements CategoryDAOIF {
         Connection con = ConnectionDAO.getInstance().getConnection();
 
         Statement state = con.createStatement();
-        ResultSet rs = state.executeQuery("SELECT * FROM customer ORDER BY customer_id");
+        ResultSet rs = state.executeQuery("SELECT * FROM category ORDER BY category_id");
 
         while(rs.next()){
             Category category = new Category(

@@ -5,6 +5,7 @@ import Code.Invoice;
 import Errors.QueryError;
 import Interface.InvoiceDAOIF;
 
+import java.awt.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -93,10 +94,13 @@ public class InvoiceDAO implements InvoiceDAOIF {
                     new Customer(),
                     rs.getString("dato")
             );
-            System.out.println(rs.getInt(1));
 
-            String sql2 = "SELECT a.customer_id FROM invoice i INNER JOIN customer a ON a.customer_id=i.customer WHERE i.invoice_id="+rs.getInt("invoice_id");
-            ResultSet result2 = state.executeQuery(sql2);
+            String sql2 = "SELECT a.customer_id "
+                    +"FROM invoice i "
+                    +"INNER JOIN customer a ON a.customer_id=i.customer "
+                    +"WHERE i.invoice_id="+rs.getInt("invoice_id");
+            Statement state2 = con.createStatement();
+            ResultSet result2 = state2.executeQuery(sql2);
             Customer customer = UDAO.getUserById(result2.getInt("customer_id"));
             in.setCustomer(customer);
             voices.add(in);
