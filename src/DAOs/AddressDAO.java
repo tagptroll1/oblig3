@@ -8,15 +8,14 @@ import javafx.collections.ObservableList;
 
 import java.sql.*;
 
-import static Code.Utility.checkTable;
+import static Code.Utility.closeConnections;
 
 public class AddressDAO implements AddressDAOIF {
-//TODO Open/close connection correctly, fix?
     private static AddressDAO ADAO = null;
-    private static ResultSet result = null;
-    private static Statement state = null;
-    private static PreparedStatement prpState = null;
-    private static Connection con = null;
+    private static ResultSet result;
+    private static Statement state;
+    private static PreparedStatement prpState;
+    private static Connection con = ConnectionDAO.getInstance().getConnection();
 
     private AddressDAO(){}
 
@@ -25,9 +24,9 @@ public class AddressDAO implements AddressDAOIF {
             ADAO = new AddressDAO();
         }
         // Open and prepare resultset, statements and connection
-        if (con == null) con = ConnectionDAO.getInstance().getConnection();
-        if (state == null) state = con.createStatement();
-        if (prpString != null && prpState == null) prpState = con.prepareStatement(prpString);
+        if (con.isClosed()) con = ConnectionDAO.getInstance().getConnection();
+        if (state == null || state.isClosed()) state = con.createStatement();
+        if (prpString != null && (prpState == null || prpState.isClosed())) prpState = con.prepareStatement(prpString);
 
         return ADAO;
     }
@@ -37,21 +36,9 @@ public class AddressDAO implements AddressDAOIF {
         return ADAO;
     }
 
-    private static void closeConnections(){
-        if (result != null) try{result.close();} catch (SQLException e) {/*ignored*/};
-        if (state != null) try{state.close();} catch (SQLException e) {/*ignored*/};
-        if (prpState != null) try{prpState.close();} catch (SQLException e) {/*ignored*/};
-        if (con != null) try{ConnectionDAO.getInstance().closeConnection();} catch (SQLException e) {/*ignored*/};
-        result = null;
-        state = null;
-        prpState = null;
-        con = null;
-    }
-
     @Override
     public void addAddress(Address address){
         try {
-            if (!checkTable("address")) return;
             String sql = "INSERT OR REPLACE INTO address values(?,?,?,?,?);";
             getInstance(sql);
 
@@ -65,7 +52,7 @@ public class AddressDAO implements AddressDAOIF {
         } catch (SQLException e){
             e.printStackTrace();
         } finally {
-            closeConnections();
+            closeConnections(result, state, prpState, con);
         }
     }
 
@@ -80,18 +67,17 @@ public class AddressDAO implements AddressDAOIF {
             result.next();
             if (result.getRow()==0) throw new QueryError("No result found within address table with id: "+id);
 
-            Address address = new Address(
+            return new Address(
                     result.getInt("address_id"),
                     result.getString("street_number"),
                     result.getString("street_name"),
                     result.getString("postal_code"),
                     result.getString("postal_town")
             );
-            return address;
         } catch (SQLException e){
             throw new QueryError("No result found within address table with id: "+id);
         } finally {
-            closeConnections();
+            closeConnections(result, state, prpState, con);
         }
     }
 
@@ -106,7 +92,7 @@ public class AddressDAO implements AddressDAOIF {
         } catch (SQLException e){
             e.printStackTrace();
         } finally {
-            closeConnections();
+            closeConnections(result, state, prpState, con);
         }
     }
 
@@ -131,7 +117,7 @@ public class AddressDAO implements AddressDAOIF {
         } catch (SQLException e){
             return  addresses;
         } finally {
-            closeConnections();
+            closeConnections(result, state, prpState, con);
         }
     }
 }

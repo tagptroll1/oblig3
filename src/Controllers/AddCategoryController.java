@@ -2,6 +2,7 @@ package Controllers;
 
 import Code.Category;
 import DAOs.CategoryDAO;
+import Errors.InsertionError;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -18,7 +19,7 @@ public class AddCategoryController {
 
     public void addCategory() throws SQLException {
         String name = categoryName.getText();
-        if(name!=null || !name.trim().isEmpty()){
+        if(name!=null && !name.trim().isEmpty()){
             Category category = new Category(
                     id,
                     name
@@ -28,7 +29,7 @@ public class AddCategoryController {
             if (database!=null) database.dbGoCategory();
             stage.close();
         } else {
-            System.out.println("something happen!");
+            throw new InsertionError("Name field that is required in a new category is empty!");
         }
 
     }

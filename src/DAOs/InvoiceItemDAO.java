@@ -9,111 +9,138 @@ import javafx.collections.ObservableList;
 
 import java.sql.*;
 
-import static Code.Utility.checkTable;
+import static Code.Utility.closeConnections;
 
 public class InvoiceItemDAO implements InvoiceItemDAOIF {
-    //TODO Open/close connection correctly, fix?
     private static InvoiceItemDAO IIDAO = null;
+    private static ResultSet result;
+    private static Statement state;
+    private static PreparedStatement prpState;
+    private static Connection con = ConnectionDAO.getInstance().getConnection();
 
     private InvoiceItemDAO(){};
 
-    public static InvoiceItemDAO getInstance(){
+    public static InvoiceItemDAO getInstance(String prpString) throws SQLException {
         if (IIDAO == null){
             IIDAO = new InvoiceItemDAO();
         }
+
+        // Open and prepare resultset, statements and connection
+        if (con.isClosed()) con = ConnectionDAO.getInstance().getConnection();
+        if (state == null || state.isClosed()) state = con.createStatement();
+        if (prpString != null && (prpState == null || prpState.isClosed())) prpState = con.prepareStatement(prpString);
+
+        return IIDAO;
+    }
+
+    public static InvoiceItemDAO getInstance() throws SQLException {
+        getInstance(null);
         return IIDAO;
     }
 
     @Override
-    public void addInvoiceItem(InvoiceItem iItem) throws SQLException {
-        getInstance();
-        Connection con = ConnectionDAO.getInstance().getConnection();
-        if (!checkTable("invoice_items")) return;
+    public void addInvoiceItem(InvoiceItem iItem){
+        try {
+            String sql = "INSERT OR REPLACE INTO invoice_items values(?,?);";
+            getInstance(sql);
 
-        String sql = "INSERT OR REPLACE INTO invoice_items values(?,?);";
-        PreparedStatement state = con.prepareStatement(sql);
-        con.close();
-
-        if (!(iItem.getInvoiceId() != 0 && iItem.getProductId() != 0)){
-            throw new InsertionError("Invoice item insertion error: one or both ids in invoice item are invalid");
+            if (!(iItem.getInvoiceId() != 0 && iItem.getProductId() != 0)){
+                throw new InsertionError("Invoice item insertion error: one or both ids in invoice item are invalid");
+            }
+            prpState.setInt(1, iItem.getInvoiceId());
+            prpState.setInt(2, iItem.getProductId());
+            prpState.execute();
+            System.out.println("Added: invoice item to db");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnections(result, state, prpState, con);
         }
-        state.setInt(1, iItem.getInvoiceId());
-        state.setInt(2, iItem.getProductId());
-        state.execute();
-        System.out.println("Added: invoice item to db");
     }
 
     @Override
-    public InvoiceItem getInvoiceItemByInvoiceId(int id) throws SQLException {
-        getInstance();
-        Connection con = ConnectionDAO.getInstance().getConnection();
-        Statement state = con.createStatement();
-        con.close();
+    public InvoiceItem getInvoiceItemByInvoiceId(int id){
+        try {
+            getInstance();
+            String sql = "SELECT * FROM invoice_items WHERE invoice="+id;
+            result = state.executeQuery(sql);
 
-        String sql = "SELECT * FROM invoice_items WHERE invoice="+id;
-        ResultSet result = state.executeQuery(sql);
-        // sjekk at den fikk noe
-        result.next();
-        if (result.getRow()==0) throw new QueryError("No result found within category table with id: "+id);
+            // sjekk at den fikk noe
+            result.next();
+            if (result.getRow()==0) throw new QueryError("No result found within category table with id: "+id);
 
-        InvoiceItem iItem = new InvoiceItem(
-                result.getInt("invoice"),
-                result.getInt("product")
-        );
-
-        return iItem;
-    }
-
-    @Override
-    public InvoiceItem getInvoiceItemByProductId(int id) throws SQLException {
-        getInstance();
-        Connection con = ConnectionDAO.getInstance().getConnection();
-        Statement state = con.createStatement();
-        con.close();
-
-        String sql = "SELECT * FROM invoice_items WHERE product="+id;
-        ResultSet result = state.executeQuery(sql);
-        // sjekk at den fikk noe
-        result.next();
-        if (result.getRow()==0) throw new QueryError("No result found within category table with id: "+id);
-
-        return new InvoiceItem(
-                result.getInt("invoice"),
-                result.getInt("product")
-        );
-
-    }
-
-    @Override
-    public void deleteInvoiceItem(InvoiceItem iItem) throws SQLException {
-        getInstance();
-        Connection con = ConnectionDAO.getInstance().getConnection();
-        String sql = "DELETE FROM invoice_items WHERE invoice = ?;";
-        PreparedStatement state = con.prepareStatement(sql);
-        con.close();
-
-        state.setInt(1, iItem.getInvoiceId());
-        state.executeUpdate();
-    }
-
-    @Override
-    public ObservableList<InvoiceItem> getAllInvoiceItems() throws SQLException {
-        getInstance();
-
-        ObservableList<InvoiceItem> iItems = FXCollections.observableArrayList();
-        Connection con = ConnectionDAO.getInstance().getConnection();
-
-        Statement state = con.createStatement();
-        ResultSet rs = state.executeQuery("SELECT * FROM invoice_items ORDER BY invoice");
-        con.close();
-
-        while(rs.next()){
             InvoiceItem iItem = new InvoiceItem(
-                    rs.getInt("invoice"),
-                    rs.getInt("product")
+                    result.getInt("invoice"),
+                    result.getInt("product")
             );
-            iItems.add(iItem);
+
+            return iItem;
+        } catch (SQLException e) {
+            throw new QueryError(e.toString());
+        } finally {
+            closeConnections(result, state, prpState, con);
         }
-        return iItems;
+    }
+
+    @Override
+    public InvoiceItem getInvoiceItemByProductId(int id){
+        try {
+            getInstance();
+            String sql = "SELECT * FROM invoice_items WHERE product="+id;
+            result = state.executeQuery(sql);
+
+            // sjekk at den fikk noe
+            result.next();
+            if (result.getRow()==0) throw new QueryError("No result found within category table with id: "+id);
+
+            return new InvoiceItem(
+                    result.getInt("invoice"),
+                    result.getInt("product")
+            );
+        } catch (SQLException e) {
+            throw new QueryError(e.toString());
+        } finally {
+            closeConnections(result, state, prpState, con);
+        }
+
+    }
+
+    @Override
+    public void deleteInvoiceItem(InvoiceItem iItem){
+        try {
+            String sql = "DELETE FROM invoice_items WHERE invoice = ?;";
+            getInstance(sql);
+
+            prpState.setInt(1, iItem.getInvoiceId());
+            prpState.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnections(result, state, prpState, con);
+        }
+    }
+
+    @Override
+    public ObservableList<InvoiceItem> getAllInvoiceItems(){
+        ObservableList<InvoiceItem> iItems = FXCollections.observableArrayList();
+
+        try {
+            String sql = "SELECT * FROM invoice_items ORDER BY invoice";
+            getInstance();
+            result = state.executeQuery(sql);
+
+            while(result.next()){
+                InvoiceItem iItem = new InvoiceItem(
+                        result.getInt("invoice"),
+                        result.getInt("product")
+                );
+                iItems.add(iItem);
+            }
+            return iItems;
+        } catch (SQLException e) {
+            return iItems;
+        } finally {
+            closeConnections(result, state, prpState, con);
+        }
     }
 }

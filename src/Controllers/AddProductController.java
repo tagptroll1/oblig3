@@ -24,6 +24,7 @@ public class AddProductController {
         String desc = productDesc.getText();
         String priceString = productPrice.getText();
         String categoryIdString = productCategory.getText();
+
         // Checks for number related fields before applying ParseInt/double
         if (priceString == null || priceString.trim().isEmpty()){
             throw new InsertionError("Price field cannot be empty");
@@ -38,7 +39,7 @@ public class AddProductController {
             throw new InsertionError("Category Id cannot be 0");
         }
 
-        if((name!=null || !name.trim().isEmpty())){
+        if((name!=null && !name.trim().isEmpty()) && (desc!=null && !desc.trim().isEmpty())){
             Item item = new Item(
                     id,
                     name,
@@ -51,7 +52,7 @@ public class AddProductController {
             if (this.database!=null) this.database.dbGoProduct();
             stage.close();
         } else {
-            System.out.println("something happen!");
+            throw new InsertionError("Name and description is required to insert a new Product!");
         }
     }
 

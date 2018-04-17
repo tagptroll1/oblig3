@@ -2,6 +2,7 @@ package Controllers;
 
 import Code.InvoiceItem;
 import DAOs.InvoiceItemDAO;
+import Errors.InsertionError;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -16,25 +17,31 @@ public class AddInvoiceItemController {
     private dbViewerController database;
 
     public void addInvoiceItem() throws SQLException {
+        if ((invoiceItemProductId.getText() == null || invoiceItemProductId.getText().trim().isEmpty())
+                || (invoiceItemInvoiceId.getText() == null || invoiceItemInvoiceId.getText().trim().isEmpty())){
+            throw new InsertionError("Product id and/or Invoice id cannot be empty!");
+        }
         int invoiceItemInvoice = Integer.parseInt(invoiceItemInvoiceId.getText());
         int invoiceItemProduct = Integer.parseInt(invoiceItemProductId.getText());
-        if(invoiceItemInvoice!=0 && invoiceItemProduct!=0){
-            InvoiceItem invoiceItem = new InvoiceItem(
-                    invoiceItemInvoice,
-                    invoiceItemProduct
-            );
-            InvoiceItemDAO.getInstance().addInvoiceItem(invoiceItem);
-            Stage stage = (Stage) invoiceItemInvoiceId.getScene().getWindow();
-            if (database!=null) database.dbGoInvoiceItem();
-            stage.close();
-        } else {
-            System.out.println("something happen!");
+
+        if(invoiceItemInvoice<=0 && invoiceItemProduct<=0) {
+            throw new InsertionError("Invoice id and/or Product id cannot be 0!");
         }
+
+        InvoiceItem invoiceItem = new InvoiceItem(
+                invoiceItemInvoice,
+                invoiceItemProduct
+        );
+        InvoiceItemDAO.getInstance().addInvoiceItem(invoiceItem);
+        Stage stage = (Stage) invoiceItemInvoiceId.getScene().getWindow();
+        if (database!=null) database.dbGoInvoiceItem();
+        stage.close();
+
     }
     public void setOptionalId(InvoiceItem invoiceItem, dbViewerController db, String title){
         if (invoiceItem!=null){
-            invoiceItemInvoiceId.setText("Id: "+invoiceItem.getInvoiceId());
-            invoiceItemProductId.setText(invoiceItem.getProductId() +"");
+            invoiceItemInvoiceId.setText(invoiceItem.getInvoiceId() + "");
+            invoiceItemProductId.setText(invoiceItem.getProductId() + "");
         }
         invoiceItemTitle.setText(title);
         database = db;

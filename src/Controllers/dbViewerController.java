@@ -98,7 +98,6 @@ public class dbViewerController implements Initializable {
     }
 
     public void dbGoAddress() throws SQLException {
-        //TODO Add check, implement warning window
         removeDB();
 
         ObservableList<Address> addresses = AddressDAO.getInstance().getAllAddresses();
@@ -129,45 +128,38 @@ public class dbViewerController implements Initializable {
         dbTable.setItems(addresses);
         dbTable.getColumns().addAll(column, SNColumn, SNaColumn, PCColumn, PTColumn);
 
-        dbTable.setOnMouseClicked(new EventHandler<>() {
-            @Override
-            public void handle(MouseEvent event) {
-                selectedAddress =  dbTable.getSelectionModel().getSelectedItem();
-                dbBtnDel.setDisable(false);
-                dbBtnEdit.setDisable(false);
-            }
+        dbTable.setOnMouseClicked(ev -> {
+            selectedAddress =  dbTable.getSelectionModel().getSelectedItem();
+            dbBtnDel.setDisable(false);
+            dbBtnEdit.setDisable(false);
+
         });
-        dbBtnDel.setOnAction(new EventHandler<>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
+        dbBtnDel.setOnAction(ev -> {
+            try {
+                ConfirmationWindow confirm = new ConfirmationWindow();
+                if (confirm.display()){
                     AddressDAO.getInstance().deleteAddress(selectedAddress);
                     dbGoAddress();
-                } catch (SQLException e) {
-                    e.printStackTrace();
                 }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         });
-        dbBtnEdit.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    AddAddressWindow addressWindow = new AddAddressWindow();
-                    addressWindow.display(selectedAddress, self, "Edit an address");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        dbBtnEdit.setOnAction(ev -> {
+            try {
+                AddAddressWindow addressWindow = new AddAddressWindow();
+                addressWindow.display(selectedAddress, self, "Edit an address");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
-        dbBtnAdd.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    AddAddressWindow addressWindow = new AddAddressWindow();
-                    addressWindow.display(null, self, "Add an address");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        dbBtnAdd.setOnAction(ev -> {
+            try {
+                AddAddressWindow addressWindow = new AddAddressWindow();
+                addressWindow.display(null, self, "Add an address");
+            } catch (IOException e) {
+                e.printStackTrace();
+
             }
         });
 
@@ -176,7 +168,6 @@ public class dbViewerController implements Initializable {
     }
 
     public void dbGoCategory() throws SQLException {
-        //TODO Add check, implement warning window
         removeDB();
         ObservableList<Category> categories = CategoryDAO.getInstance().getAllCategories();
         TableView<Category> dbTable = new TableView<>();
@@ -194,45 +185,39 @@ public class dbViewerController implements Initializable {
         dbTable.setItems(categories);
         dbTable.getColumns().addAll(idColumn, CNColumn);
 
-        dbTable.setOnMouseClicked(new EventHandler<>() {
-            @Override
-            public void handle(MouseEvent event) {
-                selectedCategory =  dbTable.getSelectionModel().getSelectedItem();
-                dbBtnDel.setDisable(false);
-                dbBtnEdit.setDisable(false);
-            }
+        dbTable.setOnMouseClicked(ev -> {
+            selectedCategory =  dbTable.getSelectionModel().getSelectedItem();
+            dbBtnDel.setDisable(false);
+            dbBtnEdit.setDisable(false);
         });
-        dbBtnDel.setOnAction(new EventHandler<>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
+
+        dbBtnDel.setOnAction(ev -> {
+            try {
+                ConfirmationWindow confirm = new ConfirmationWindow();
+                if (confirm.display()){
                     CategoryDAO.getInstance().deleteCategory(selectedCategory);
                     dbGoCategory();
-                } catch (SQLException e) {
-                    e.printStackTrace();
                 }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         });
-        dbBtnEdit.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    AddCategoryWindow categoryWindow = new AddCategoryWindow();
-                    categoryWindow.display(selectedCategory, self, "Edit a category");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+
+        dbBtnEdit.setOnAction(ev -> {
+            try {
+                AddCategoryWindow categoryWindow = new AddCategoryWindow();
+                categoryWindow.display(selectedCategory, self, "Edit a category");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
-        dbBtnAdd.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    AddCategoryWindow categoryWindow = new AddCategoryWindow();
-                    categoryWindow.display(null, self, "Add a category");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+
+        dbBtnAdd.setOnAction(ev -> {
+            try {
+                AddCategoryWindow categoryWindow = new AddCategoryWindow();
+                categoryWindow.display(null, self, "Add a category");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
 
@@ -240,7 +225,6 @@ public class dbViewerController implements Initializable {
     }
 
     public void dbGoCustomer() throws SQLException {
-        //TODO Add check, implement warning window
         removeDB();
 
         ObservableList<Customer> customers = CustomerDAO.getInstance().getAllUsers();
@@ -271,45 +255,39 @@ public class dbViewerController implements Initializable {
         dbTable.setItems(customers);
         dbTable.getColumns().addAll(idColumn, CNColumn, adColumn, phColumn, biColumn);
 
-        dbTable.setOnMouseClicked(new EventHandler<>() {
-            @Override
-            public void handle(MouseEvent event) {
-                selectedCustomer =  dbTable.getSelectionModel().getSelectedItem();
-                dbBtnDel.setDisable(false);
-                dbBtnEdit.setDisable(false);
-            }
+        dbTable.setOnMouseClicked(ev -> {
+            selectedCustomer =  dbTable.getSelectionModel().getSelectedItem();
+            dbBtnDel.setDisable(false);
+            dbBtnEdit.setDisable(false);
         });
-        dbBtnDel.setOnAction(new EventHandler<>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
+
+        dbBtnDel.setOnAction(ev -> {
+            try {
+                ConfirmationWindow confirm = new ConfirmationWindow();
+                if (confirm.display()){
                     CustomerDAO.getInstance().deleteUser(selectedCustomer);
                     dbGoCustomer();
-                } catch (SQLException e) {
-                    e.printStackTrace();
                 }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         });
-        dbBtnEdit.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    AddCustomerWindow customerWindow = new AddCustomerWindow();
-                    customerWindow.display(selectedCustomer, self, "Edit a customer");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+
+        dbBtnEdit.setOnAction(ev -> {
+            try {
+                AddCustomerWindow customerWindow = new AddCustomerWindow();
+                customerWindow.display(selectedCustomer, self, "Edit a customer");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
-        dbBtnAdd.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    AddCustomerWindow customerWindow = new AddCustomerWindow();
-                    customerWindow.display(null, self, "Add a customer");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+
+        dbBtnAdd.setOnAction(ev -> {
+            try {
+                AddCustomerWindow customerWindow = new AddCustomerWindow();
+                customerWindow.display(null, self, "Add a customer");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
 
@@ -317,7 +295,6 @@ public class dbViewerController implements Initializable {
     }
 
     public void dbGoInvoice() throws SQLException {
-        //TODO Add check, implement warning window
         removeDB();
 
         ObservableList<Invoice> invoices = InvoiceDAO.getInstance().getAllInvoices();
@@ -339,52 +316,46 @@ public class dbViewerController implements Initializable {
 
         invoiceTable.setItems(invoices);
         invoiceTable.getColumns().addAll(idColumn, CIColumn, dateColumn);
-        invoiceTable.setOnMouseClicked(new EventHandler<>() {
-            @Override
-            public void handle(MouseEvent event) {
-                selectedInvoice =  invoiceTable.getSelectionModel().getSelectedItem();
-                dbBtnDel.setDisable(false);
-                dbBtnEdit.setDisable(false);
-            }
+        invoiceTable.setOnMouseClicked(ev -> {
+            selectedInvoice =  invoiceTable.getSelectionModel().getSelectedItem();
+            dbBtnDel.setDisable(false);
+            dbBtnEdit.setDisable(false);
         });
-        dbBtnDel.setOnAction(new EventHandler<>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
+
+        dbBtnDel.setOnAction(ev -> {
+            try {
+                ConfirmationWindow confirm = new ConfirmationWindow();
+                if (confirm.display()){
                     InvoiceDAO.getInstance().deleteInvoice(selectedInvoice);
                     dbGoInvoice();
-                } catch (SQLException e) {
-                    e.printStackTrace();
                 }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         });
-        dbBtnEdit.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    AddInvoiceWindow invoiceWindow = new AddInvoiceWindow();
-                    invoiceWindow.display(selectedInvoice, self, "Edit an invoice");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+
+        dbBtnEdit.setOnAction(ev -> {
+            try {
+                AddInvoiceWindow invoiceWindow = new AddInvoiceWindow();
+                invoiceWindow.display(selectedInvoice, self, "Edit an invoice");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
-        dbBtnAdd.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    AddInvoiceWindow invoiceWindow = new AddInvoiceWindow();
-                    invoiceWindow.display(null, self, "Add an invoice");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+
+        dbBtnAdd.setOnAction(ev -> {
+            try {
+                AddInvoiceWindow invoiceWindow = new AddInvoiceWindow();
+                invoiceWindow.display(null, self, "Add an invoice");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
+
         anchorPane.getChildren().add(2, invoiceTable);
     }
 
     public void dbGoInvoiceItem() throws SQLException {
-        //TODO Add check, implement warning window
         //TODO Doesn't have id.. maybe add? or multiple relations
         removeDB();
         ObservableList<InvoiceItem> invoiceItems = InvoiceItemDAO.getInstance().getAllInvoiceItems();
@@ -403,45 +374,39 @@ public class dbViewerController implements Initializable {
         dbTable.setItems(invoiceItems);
         dbTable.getColumns().addAll(idColumn, CNColumn);
 
-        dbTable.setOnMouseClicked(new EventHandler<>() {
-            @Override
-            public void handle(MouseEvent event) {
-                selectedInvoiceItem =  dbTable.getSelectionModel().getSelectedItem();
-                dbBtnDel.setDisable(false);
-                dbBtnEdit.setDisable(false);
-            }
+        dbTable.setOnMouseClicked(ev -> {
+            selectedInvoiceItem =  dbTable.getSelectionModel().getSelectedItem();
+            dbBtnDel.setDisable(false);
+            dbBtnEdit.setDisable(false);
         });
-        dbBtnDel.setOnAction(new EventHandler<>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
+
+        dbBtnDel.setOnAction(ev -> {
+            try {
+                ConfirmationWindow confirm = new ConfirmationWindow();
+                if (confirm.display()){
                     InvoiceItemDAO.getInstance().deleteInvoiceItem(selectedInvoiceItem);
                     dbGoInvoiceItem();
-                } catch (SQLException e) {
-                    e.printStackTrace();
                 }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         });
-        dbBtnEdit.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    AddInvoiceItemWindow invoiceItemWindow = new AddInvoiceItemWindow();
-                    invoiceItemWindow.display(selectedInvoiceItem, self, "Edit an invoice item");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+
+        dbBtnEdit.setOnAction(ev -> {
+            try {
+                AddInvoiceItemWindow invoiceItemWindow = new AddInvoiceItemWindow();
+                invoiceItemWindow.display(selectedInvoiceItem, self, "Edit an invoice item");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
-        dbBtnAdd.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    AddInvoiceItemWindow invoiceItemWindow = new AddInvoiceItemWindow();
-                    invoiceItemWindow.display(null, self, "Add an invoice item");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+
+        dbBtnAdd.setOnAction(ev -> {
+            try {
+                AddInvoiceItemWindow invoiceItemWindow = new AddInvoiceItemWindow();
+                invoiceItemWindow.display(null, self, "Add an invoice item");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
 
@@ -449,7 +414,6 @@ public class dbViewerController implements Initializable {
     }
 
     public void dbGoProduct() throws SQLException {
-        //TODO Add check, implement warning window
         removeDB();
         ObservableList<Item> products = ProductDAO.getInstance().getAllProducts();
         TableView<Item> dbTable = new TableView<>();
@@ -479,45 +443,39 @@ public class dbViewerController implements Initializable {
         dbTable.setItems(products);
         dbTable.getColumns().addAll(idColumn, CNColumn, adColumn, phColumn, biColumn);
 
-        dbTable.setOnMouseClicked(new EventHandler<>() {
-            @Override
-            public void handle(MouseEvent event) {
-                selectedProduct =  dbTable.getSelectionModel().getSelectedItem();
-                dbBtnDel.setDisable(false);
-                dbBtnEdit.setDisable(false);
-            }
+        dbTable.setOnMouseClicked(ev -> {
+            selectedProduct =  dbTable.getSelectionModel().getSelectedItem();
+            dbBtnDel.setDisable(false);
+            dbBtnEdit.setDisable(false);
         });
-        dbBtnDel.setOnAction(new EventHandler<>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
+
+        dbBtnDel.setOnAction(ev -> {
+            try {
+                ConfirmationWindow confirm = new ConfirmationWindow();
+                if (confirm.display()){
                     ProductDAO.getInstance().deleteProduct(selectedProduct);
                     dbGoProduct();
-                } catch (SQLException e) {
-                    e.printStackTrace();
                 }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         });
-        dbBtnEdit.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    AddProductWindow addProductWindow = new AddProductWindow();
-                    addProductWindow.display(selectedProduct, self, "Edit a product");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+
+        dbBtnEdit.setOnAction(ev -> {
+            try {
+                AddProductWindow addProductWindow = new AddProductWindow();
+                addProductWindow.display(selectedProduct, self, "Edit a product");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
-        dbBtnAdd.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    AddProductWindow addProductWindow = new AddProductWindow();
-                    addProductWindow.display(null, self, "Add a product");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+
+        dbBtnAdd.setOnAction(ev -> {
+            try {
+                AddProductWindow addProductWindow = new AddProductWindow();
+                addProductWindow.display(null, self, "Add a product");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
 

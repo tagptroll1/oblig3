@@ -10,7 +10,7 @@ import java.sql.*;
 
 public class ConnectionDAO implements ConnectionDAOIF {
     private static ConnectionDAO connection = null;
-    private static Connection con = null;
+    private static Connection con;
 
     private ConnectionDAO(){}
 
@@ -31,7 +31,7 @@ public class ConnectionDAO implements ConnectionDAOIF {
     }
 
     private static void createDB() throws FileNotFoundException, SQLException {
-        if (con == null) getCon();
+        if (con == null || con.isClosed()) getCon();
         Statement state1 = con.createStatement();
         try {
             ResultSet rs = state1.executeQuery("SELECT COUNT(*) FROM address");
@@ -71,16 +71,18 @@ public class ConnectionDAO implements ConnectionDAOIF {
     @Override
     public Connection getConnection(){
         if (connection == null) getInstance();
-        if (con == null) getCon();
+        try {
+            if (con == null || con.isClosed()) getCon();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return con;
     }
 
     @Override
     public void closeConnection() throws SQLException {
-        if (con == null) return;
-        if (con.isClosed()) return;
+        if (con == null || con.isClosed()) return;
         con.close();
-        con = null;
         System.out.println("Closed connection");
     }
 }

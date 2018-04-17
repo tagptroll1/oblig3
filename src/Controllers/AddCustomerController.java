@@ -3,6 +3,7 @@ package Controllers;
 
 import Code.Customer;
 import DAOs.CustomerDAO;
+import Errors.InsertionError;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -20,11 +21,19 @@ public class AddCustomerController {
     private int id;
 
     public void addCustomer() throws SQLException {
+        if (customerAddress == null || customerAddress.getText().trim().isEmpty()){
+            throw new InsertionError("Address field cannot be empty!");
+        }
+
         String name = customerName.getText();
         int address = Integer.parseInt(customerAddress.getText());
+
+        if (address <= 0){
+            throw new InsertionError("Address id cannot be 0!");
+        }
         String phone = customerPhone.getText();
         String billing = customerBilling.getText();
-        if(name!=null && address != 0 && phone!=null && billing !=null){
+        if(name!=null && phone!=null && billing !=null){
             Customer customer = new Customer(
                     id,
                     customerName.getText(),
@@ -37,7 +46,7 @@ public class AddCustomerController {
             if (database!=null) database.dbGoCustomer();
             stage.close();
         } else {
-            System.out.println("something happen!");
+            throw new InsertionError("One or multiple fields that are required in a new customer is empty!");
         }
 
     }

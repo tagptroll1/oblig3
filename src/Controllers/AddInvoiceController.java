@@ -1,8 +1,8 @@
 package Controllers;
 
 import Code.Invoice;
-import DAOs.CustomerDAO;
 import DAOs.InvoiceDAO;
+import Errors.InsertionError;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -18,9 +18,16 @@ public class AddInvoiceController {
     private int id;
 
     public void addInvoice() throws SQLException {
-        int customerid = Integer.parseInt(invoiceCustomer.getText());
         String date = invoiceDate.getText();
-        if(date!=null && customerid!=0){
+
+        if (invoiceCustomer.getText() == null || invoiceCustomer.getText().trim().isEmpty() ){
+            throw new InsertionError("Customer id cannot be empty!");
+        }
+        int customerid = Integer.parseInt(invoiceCustomer.getText());
+        if (customerid >= 0){
+            throw new InsertionError("Customer Id cannot be 0!");
+        }
+        if(date!=null && !date.trim().isEmpty()){
             Invoice invoice = new Invoice(
                     id,
                     customerid,
@@ -31,7 +38,7 @@ public class AddInvoiceController {
             if (datebase!=null) datebase.dbGoInvoice();
             stage.close();
         } else {
-            System.out.println("something happen!");
+            throw new InsertionError("Date field cannot be empty!");
         }
     }
 

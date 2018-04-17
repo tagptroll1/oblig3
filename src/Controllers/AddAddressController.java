@@ -2,7 +2,7 @@ package Controllers;
 
 import Code.Address;
 import DAOs.AddressDAO;
-import Stages.dbViewerWindow;
+import Errors.InsertionError;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -40,7 +40,7 @@ public class AddAddressController {
             if (database!=null) database.dbGoAddress();
             stage.close();
         } else {
-            System.out.println("something happen!");
+            throw new InsertionError("One or multiple fields that are required in a new street is empty!");
         }
 
     }
