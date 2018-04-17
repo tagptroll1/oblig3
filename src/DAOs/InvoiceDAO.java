@@ -16,13 +16,12 @@ public class InvoiceDAO implements InvoiceDAOIF {
     private static InvoiceDAO IDAO = null;
     private static ResultSet result;
     private static Statement state;
-    private static PreparedStatement prpState;
     private static Connection con = ConnectionDAO.getInstance().getConnection();
 
 
     private InvoiceDAO(){}
 
-    public static InvoiceDAO getInstance(String prpString) throws SQLException {
+    public static InvoiceDAO getInstance() throws SQLException {
         if (IDAO == null){
             IDAO = new InvoiceDAO();
         }
@@ -30,31 +29,28 @@ public class InvoiceDAO implements InvoiceDAOIF {
         // Open and prepare resultset, statements and connection
         if (con.isClosed()) con = ConnectionDAO.getInstance().getConnection();
         if (state == null || state.isClosed()) state = con.createStatement();
-        if (prpString != null && (prpState == null || prpState.isClosed())) prpState = con.prepareStatement(prpString);
 
-        return IDAO;
-    }
-
-    public static InvoiceDAO getInstance() throws SQLException {
-        getInstance(null);
         return IDAO;
     }
 
     @Override
     public void addInvoice(Invoice invoice){
         try {
+            getInstance();
             String sql = "INSERT OR REPLACE INTO invoice values(?,?,?);";
-            getInstance(sql);
+            PreparedStatement prpState = con.prepareStatement(sql);
 
             if (invoice.getId() != -1) prpState.setInt(1, invoice.getId());
             prpState.setInt(2, invoice.getCustomerId());
             prpState.setString(3, invoice.getDue());
             prpState.execute();
+
             System.out.println("Added: Invoice to db");
+            //closeConnections(prpState);
+            closeConnections(result, state, prpState, con);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            closeConnections(result, state, prpState, con);
         }
     }
 
@@ -82,22 +78,26 @@ public class InvoiceDAO implements InvoiceDAOIF {
             ResultSet itemResult = itemState.executeQuery(qItems);
 
             while(itemResult.next()){
-                items.add(ProductDAO.getInstance().getProductById(itemResult.getInt(1)));
+                int productID = itemResult.getInt("product_id");
+                Item product = ProductDAO.getInstance().getProductById(productID);
+                items.add(product);
             }
 
-            itemResult.close();
-            itemState.close();
-
-            return new Invoice(
+            Invoice invoice = new Invoice(
                     result.getInt("invoice_id"),
                     result.getInt("customer"),
                     result.getString("dato"),
                     items
             );
+            closeConnections(itemResult);
+            closeConnections(itemState);
+            closeConnections(result, state, con);
+            return invoice;
         } catch (SQLException e) {
-            throw new QueryError(e.toString());
+            e.printStackTrace();
+            return null;
+            //throw new QueryError(e.toString());
         } finally {
-            closeConnections(result, state, prpState, con);
         }
 
     }
@@ -105,15 +105,18 @@ public class InvoiceDAO implements InvoiceDAOIF {
     @Override
     public void deleteInvoice(Invoice invoice){
         try {
+            getInstance();
             String sql = "DELETE FROM invoice WHERE invoice_id = ?;";
-            getInstance(sql);
+            PreparedStatement prpState = con.prepareStatement(sql);
 
             prpState.setInt(1, invoice.getId());
             prpState.executeUpdate();
+
+            //closeConnections(prpState);
+            closeConnections(result, state, prpState, con);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            closeConnections(result, state, prpState, con);
         }
     }
 
@@ -133,11 +136,11 @@ public class InvoiceDAO implements InvoiceDAOIF {
                 );
                 voices.add(in);
             }
+            closeConnections(result, state, con);
             return voices;
         } catch (SQLException e) {
             return voices;
         } finally {
-            closeConnections(result, state, prpState, con);
         }
     }
 }

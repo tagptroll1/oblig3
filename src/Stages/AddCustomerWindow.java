@@ -22,6 +22,7 @@ public class AddCustomerWindow {
         controller.setOptionalId(customer, db, title);
         window.setTitle("Add a customer");
         window.setScene(new Scene(root));
+        window.setResizable(false);
         window.showAndWait();
     }
 

@@ -14,12 +14,11 @@ public class CustomerDAO implements CustomerDAOIF {
     private static CustomerDAO UDAO = null;
     private static ResultSet result;
     private static Statement state;
-    private static PreparedStatement prpState;
     private static Connection con = ConnectionDAO.getInstance().getConnection();
 
     private CustomerDAO(){}
 
-    public static CustomerDAO getInstance(String prpString) throws SQLException {
+    public static CustomerDAO getInstance() throws SQLException {
         if (UDAO == null){
             UDAO = new CustomerDAO();
         }
@@ -27,21 +26,17 @@ public class CustomerDAO implements CustomerDAOIF {
         // Open and prepare resultset, statements and connection
         if (con.isClosed()) con = ConnectionDAO.getInstance().getConnection();
         if (state == null || state.isClosed()) state = con.createStatement();
-        if (prpString != null && (prpState == null || prpState.isClosed())) prpState = con.prepareStatement(prpString);
 
         return UDAO;
     }
 
-    public static CustomerDAO getInstance() throws SQLException {
-        getInstance(null);
-        return UDAO;
-    }
 
     @Override
     public void addUser(Customer customer){
         try {
+            getInstance();
             String sql = "INSERT OR REPLACE INTO customer values(?,?,?,?,?);";
-            getInstance(sql);
+            PreparedStatement prpState = con.prepareStatement(sql);
 
             if (customer.getId() != -1) prpState.setInt(1, customer.getId());
             prpState.setString(2, customer.getName());
@@ -49,11 +44,13 @@ public class CustomerDAO implements CustomerDAOIF {
             prpState.setString(4, customer.getPhone());
             prpState.setString(5, customer.getBilling());
             prpState.execute();
+
             System.out.println("Added: " + customer.getName());
+            //closeConnections(prpState);
+            closeConnections(result, state, prpState, con);
         } catch (SQLException e){
             e.printStackTrace();
         } finally {
-            closeConnections(result, state, prpState, con);
         }
     }
 
@@ -68,32 +65,36 @@ public class CustomerDAO implements CustomerDAOIF {
             result.next();
             if (result.getRow()==0) throw new QueryError("No result found within customer table with id: "+id);
 
-            return new Customer(
+            Customer customer = new Customer(
                     result.getInt("customer_id"),
                     result.getString("customer_name"),
                     result.getInt("address"),
                     result.getString("phone_number"),
                     result.getString("billing_account")
             );
+            closeConnections(result, state, con);
+            return customer;
         } catch (SQLException e) {
             throw new QueryError("No result found within customer table with id: "+id);
         } finally {
-            closeConnections(result, state, prpState, con);
         }
     }
 
     @Override
     public void deleteUser(Customer customer){
         try {
+            getInstance();
             String sql = "DELETE FROM customer WHERE customer_name LIKE ?;";
-            getInstance(sql);
+            PreparedStatement prpState = con.prepareStatement(sql);
 
             prpState.setString(1, customer.getName());
             prpState.executeUpdate();
+
+            //closeConnections(prpState);
+            closeConnections(result, state, prpState, con);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            closeConnections(result, state, prpState, con);
         }
     }
 
@@ -117,12 +118,12 @@ public class CustomerDAO implements CustomerDAOIF {
                 customers.add(customer);
             }
 
+            closeConnections(result, state, con);
             return customers;
         } catch (SQLException e) {
             e.printStackTrace();
             return customers;
         } finally {
-            closeConnections(result, state, prpState, con);
         }
     }
 }

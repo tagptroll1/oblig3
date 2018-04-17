@@ -14,12 +14,12 @@ public class Faktura{
 
     public void display(Invoice faktura) throws IOException, SQLException {
         Stage window = new Stage();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("../Ui/faktura.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../Ui/faktura2.fxml"));
         Parent root = loader.load();
         FakturaController controller = loader.getController();
 
         window.setTitle("Faktura");
-        window.setScene(new Scene(root, 600, 900));
+        window.setScene(new Scene(root, 600, 800));
 
         controller.setValues(faktura);
 

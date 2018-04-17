@@ -13,12 +13,11 @@ public class CategoryDAO implements CategoryDAOIF {
     private static CategoryDAO CDAO = null;
     private static ResultSet result;
     private static Statement state;
-    private static PreparedStatement prpState;
     private static Connection con = ConnectionDAO.getInstance().getConnection();
 
     private CategoryDAO(){}
 
-    public static CategoryDAO getInstance(String prpString) throws SQLException{
+    public static CategoryDAO getInstance() throws SQLException{
         if (CDAO == null){
             CDAO = new CategoryDAO();
         }
@@ -26,15 +25,10 @@ public class CategoryDAO implements CategoryDAOIF {
         // Open and prepare resultset, statements and connection
         if (con.isClosed()) con = ConnectionDAO.getInstance().getConnection();
         if (state == null || state.isClosed()) state = con.createStatement();
-        if (prpString != null && (prpState == null || prpState.isClosed())) prpState = con.prepareStatement(prpString);
 
         return CDAO;
     }
 
-    public static CategoryDAO getInstance() throws SQLException {
-        getInstance(null);
-        return CDAO;
-    }
 
     /**
      *
@@ -48,29 +42,33 @@ public class CategoryDAO implements CategoryDAOIF {
             result = state.executeQuery(sql);
 
             result.next();
-            return result.getRow() != 0;
+            boolean value = result.getRow() != 0;
+            closeConnections(result, state, con);
+            return value;
         } catch (SQLException e){
             e.printStackTrace();
             return false;
         } finally {
-            closeConnections(result, state, prpState, con);
         }
     }
 
     @Override
     public void addCateory(Category category){
         try {
+            getInstance();
             String sql = "INSERT OR REPLACE INTO category values(?,?);";
-            getInstance(sql);
+            PreparedStatement prpState = con.prepareStatement(sql);
 
             if (category.getId() != -1) prpState.setInt(1, category.getId());
             prpState.setString(2, category.getName());
             prpState.execute();
+
             System.out.println("Added: " + category.getName());
+            //closeConnections(prpState);
+            closeConnections(result, state, prpState, con);
         } catch (SQLException e){
             e.printStackTrace();
         } finally {
-            closeConnections(result, state, prpState, con);
         }
     }
 
@@ -83,29 +81,33 @@ public class CategoryDAO implements CategoryDAOIF {
             // sjekk at den fikk noe
             result.next();
             if (result.getRow() == 0) throw new QueryError("No result found within customer table with id: " + id);
-            return new Category(
+            Category category = new Category(
                     result.getInt("category_id"),
                     result.getString("category_name")
             );
+            closeConnections(result, state, con);
+            return category;
         } catch (SQLException e){
             throw new QueryError("No result found within customer table with id: " + id);
         } finally {
-            closeConnections(result, state, prpState, con);
         }
     }
 
     @Override
     public void deleteCategory(Category category){
         try {
+            getInstance();
             String sql = "DELETE FROM category WHERE category_name LIKE ?;";
-            getInstance(sql);
+            PreparedStatement prpState = con.prepareStatement(sql);
 
             prpState.setString(1, category.getName());
             prpState.executeUpdate();
+
+            //closeConnections(prpState);
+            closeConnections(result, state, prpState, con);
         } catch (SQLException e){
             e.printStackTrace();
         } finally {
-            closeConnections(result, state, prpState, con);
         }
     }
 
@@ -124,11 +126,11 @@ public class CategoryDAO implements CategoryDAOIF {
                 );
                 categories.add(category);
             }
+            closeConnections(result, state, con);
             return categories;
         } catch (SQLException e){
             return categories;
         } finally {
-            closeConnections(result, state, prpState, con);
         }
     }
 }

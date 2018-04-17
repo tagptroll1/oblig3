@@ -23,7 +23,7 @@ public class AddInvoiceWindow {
         controller.setOptionalId(invoice, db, title);
         window.setTitle("Add an invoice");
         window.setScene(new Scene(root));
-
+        window.setResizable(false);
         window.showAndWait();
     }
 

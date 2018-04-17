@@ -14,33 +14,28 @@ public class AddressDAO implements AddressDAOIF {
     private static AddressDAO ADAO = null;
     private static ResultSet result;
     private static Statement state;
-    private static PreparedStatement prpState;
     private static Connection con = ConnectionDAO.getInstance().getConnection();
 
     private AddressDAO(){}
 
-    public static AddressDAO getInstance(String prpString) throws SQLException {
+    public static AddressDAO getInstance() throws SQLException {
         if (ADAO == null){
             ADAO = new AddressDAO();
         }
         // Open and prepare resultset, statements and connection
         if (con.isClosed()) con = ConnectionDAO.getInstance().getConnection();
         if (state == null || state.isClosed()) state = con.createStatement();
-        if (prpString != null && (prpState == null || prpState.isClosed())) prpState = con.prepareStatement(prpString);
 
         return ADAO;
     }
 
-    public static AddressDAO getInstance() throws  SQLException{
-        getInstance(null);
-        return ADAO;
-    }
 
     @Override
     public void addAddress(Address address){
         try {
+            getInstance();
             String sql = "INSERT OR REPLACE INTO address values(?,?,?,?,?);";
-            getInstance(sql);
+            PreparedStatement prpState = con.prepareStatement(sql);
 
             if (address.getId() != -1) prpState.setInt(1, address.getId());
             prpState.setString(2, address.getStreetNumber());
@@ -48,11 +43,13 @@ public class AddressDAO implements AddressDAOIF {
             prpState.setString(4, address.getPostalCode());
             prpState.setString(5, address.getPostalTown());
             prpState.execute();
+
+            //closeConnections(prpState);
+            closeConnections(result, state, prpState, con);
             System.out.println("Added: Address to db");
         } catch (SQLException e){
             e.printStackTrace();
         } finally {
-            closeConnections(result, state, prpState, con);
         }
     }
 
@@ -60,39 +57,43 @@ public class AddressDAO implements AddressDAOIF {
     public Address getAddressById(int id){
         try{
             getInstance();
-
             String sql = "SELECT * FROM address WHERE address_id="+id;
             result = state.executeQuery(sql);
+
             // sjekk at den fikk noe
             result.next();
             if (result.getRow()==0) throw new QueryError("No result found within address table with id: "+id);
 
-            return new Address(
+            Address address = new Address(
                     result.getInt("address_id"),
                     result.getString("street_number"),
                     result.getString("street_name"),
                     result.getString("postal_code"),
                     result.getString("postal_town")
             );
+            closeConnections(result, state, con);
+            return address;
         } catch (SQLException e){
             throw new QueryError("No result found within address table with id: "+id);
         } finally {
-            closeConnections(result, state, prpState, con);
         }
     }
 
     @Override
     public void deleteAddress(Address address){
         try {
+            getInstance();
             String sql = "DELETE FROM address WHERE address_id = ?;";
-            getInstance(sql);
+            PreparedStatement prpState = con.prepareStatement(sql);
 
             prpState.setInt(1, address.getId());
             prpState.executeUpdate();
+
+            //closeConnections(prpState);
+            closeConnections(result, state, prpState, con);
         } catch (SQLException e){
             e.printStackTrace();
         } finally {
-            closeConnections(result, state, prpState, con);
         }
     }
 
@@ -113,11 +114,11 @@ public class AddressDAO implements AddressDAOIF {
                 );
                 addresses.add(address);
             }
+            closeConnections(result, state, con);
             return addresses;
         } catch (SQLException e){
             return  addresses;
         } finally {
-            closeConnections(result, state, prpState, con);
         }
     }
 }

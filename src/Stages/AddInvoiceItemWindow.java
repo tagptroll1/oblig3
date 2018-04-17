@@ -23,7 +23,7 @@ public class AddInvoiceItemWindow {
         controller.setOptionalId(invoiceItem, db, title);
         window.setTitle("Add an invoice item");
         window.setScene(new Scene(root));
-
+        window.setResizable(false);
         window.showAndWait();
     }
     public void display(String title) throws IOException {

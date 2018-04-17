@@ -22,7 +22,7 @@ public class AddProductWindow {
         controller.setOptionalId(product, db, title);
         window.setTitle("Add a product");
         window.setScene(new Scene(root));
-
+        window.setResizable(false);
         window.showAndWait();
     }
 

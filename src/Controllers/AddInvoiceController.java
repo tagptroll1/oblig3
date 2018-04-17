@@ -19,18 +19,19 @@ public class AddInvoiceController {
 
     public void addInvoice() throws SQLException {
         String date = invoiceDate.getText();
+        String customer = invoiceCustomer.getText();
 
-        if (invoiceCustomer.getText() == null || invoiceCustomer.getText().trim().isEmpty() ){
+        if (customer == null || customer.trim().isEmpty() ){
             throw new InsertionError("Customer id cannot be empty!");
         }
-        int customerid = Integer.parseInt(invoiceCustomer.getText());
-        if (customerid >= 0){
+        int customerId = Integer.parseInt(customer);
+        if (customerId <= 0){
             throw new InsertionError("Customer Id cannot be 0!");
         }
         if(date!=null && !date.trim().isEmpty()){
             Invoice invoice = new Invoice(
                     id,
-                    customerid,
+                    customerId,
                     date
             );
             InvoiceDAO.getInstance().addInvoice(invoice);

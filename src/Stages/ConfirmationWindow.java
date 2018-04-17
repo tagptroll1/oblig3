@@ -42,6 +42,7 @@ public class ConfirmationWindow {
 
             Scene scene = new Scene(layout);
             window.setScene(scene);
+            window.setResizable(false);
             window.showAndWait();
             return deleteIt.get();
         }

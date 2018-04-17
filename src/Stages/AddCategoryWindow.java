@@ -25,7 +25,7 @@ public class AddCategoryWindow {
         controller.setOptionalId(category, db, title);
         window.setTitle("Add a category");
         window.setScene(new Scene(root));
-
+        window.setResizable(false);
         window.showAndWait();
     }
 

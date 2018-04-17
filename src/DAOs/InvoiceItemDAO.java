@@ -15,12 +15,11 @@ public class InvoiceItemDAO implements InvoiceItemDAOIF {
     private static InvoiceItemDAO IIDAO = null;
     private static ResultSet result;
     private static Statement state;
-    private static PreparedStatement prpState;
     private static Connection con = ConnectionDAO.getInstance().getConnection();
 
-    private InvoiceItemDAO(){};
+    private InvoiceItemDAO(){}
 
-    public static InvoiceItemDAO getInstance(String prpString) throws SQLException {
+    public static InvoiceItemDAO getInstance() throws SQLException {
         if (IIDAO == null){
             IIDAO = new InvoiceItemDAO();
         }
@@ -28,21 +27,17 @@ public class InvoiceItemDAO implements InvoiceItemDAOIF {
         // Open and prepare resultset, statements and connection
         if (con.isClosed()) con = ConnectionDAO.getInstance().getConnection();
         if (state == null || state.isClosed()) state = con.createStatement();
-        if (prpString != null && (prpState == null || prpState.isClosed())) prpState = con.prepareStatement(prpString);
 
         return IIDAO;
     }
 
-    public static InvoiceItemDAO getInstance() throws SQLException {
-        getInstance(null);
-        return IIDAO;
-    }
 
     @Override
     public void addInvoiceItem(InvoiceItem iItem){
         try {
+            getInstance();
             String sql = "INSERT OR REPLACE INTO invoice_items values(?,?);";
-            getInstance(sql);
+            PreparedStatement prpState = con.prepareStatement(sql);
 
             if (!(iItem.getInvoiceId() != 0 && iItem.getProductId() != 0)){
                 throw new InsertionError("Invoice item insertion error: one or both ids in invoice item are invalid");
@@ -50,11 +45,13 @@ public class InvoiceItemDAO implements InvoiceItemDAOIF {
             prpState.setInt(1, iItem.getInvoiceId());
             prpState.setInt(2, iItem.getProductId());
             prpState.execute();
+
             System.out.println("Added: invoice item to db");
+            //closeConnections(prpState);
+            closeConnections(result, state, prpState, con);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            closeConnections(result, state, prpState, con);
         }
     }
 
@@ -74,11 +71,11 @@ public class InvoiceItemDAO implements InvoiceItemDAOIF {
                     result.getInt("product")
             );
 
+            closeConnections(result, state, con);
             return iItem;
         } catch (SQLException e) {
             throw new QueryError(e.toString());
         } finally {
-            closeConnections(result, state, prpState, con);
         }
     }
 
@@ -93,14 +90,15 @@ public class InvoiceItemDAO implements InvoiceItemDAOIF {
             result.next();
             if (result.getRow()==0) throw new QueryError("No result found within category table with id: "+id);
 
-            return new InvoiceItem(
+            InvoiceItem invoiceItem = new InvoiceItem(
                     result.getInt("invoice"),
                     result.getInt("product")
             );
+            closeConnections(result, state, con);
+            return invoiceItem;
         } catch (SQLException e) {
             throw new QueryError(e.toString());
         } finally {
-            closeConnections(result, state, prpState, con);
         }
 
     }
@@ -108,15 +106,18 @@ public class InvoiceItemDAO implements InvoiceItemDAOIF {
     @Override
     public void deleteInvoiceItem(InvoiceItem iItem){
         try {
+            getInstance();
             String sql = "DELETE FROM invoice_items WHERE invoice = ?;";
-            getInstance(sql);
+            PreparedStatement prpState = con.prepareStatement(sql);
 
             prpState.setInt(1, iItem.getInvoiceId());
             prpState.executeUpdate();
+
+            //closeConnections(prpState);
+            closeConnections(result, state, prpState, con);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            closeConnections(result, state, prpState, con);
         }
     }
 
@@ -140,7 +141,7 @@ public class InvoiceItemDAO implements InvoiceItemDAOIF {
         } catch (SQLException e) {
             return iItems;
         } finally {
-            closeConnections(result, state, prpState, con);
+            closeConnections(result, state, con);
         }
     }
 }

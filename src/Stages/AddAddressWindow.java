@@ -23,6 +23,7 @@ public class AddAddressWindow {
         window.setScene(new Scene(root));
 
         controller.setOptionalId(address, db, title);
+        window.setResizable(false);
         window.showAndWait();
     }
 

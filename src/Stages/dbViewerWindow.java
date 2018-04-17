@@ -18,7 +18,7 @@ public class dbViewerWindow {
 
         window.setTitle("Database Viewer");
         window.setScene(new Scene(root));
-
+        window.setResizable(false);
         window.showAndWait();
     }
 }
