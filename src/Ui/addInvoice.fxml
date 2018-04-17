@@ -8,11 +8,12 @@
 
 <VBox alignment="CENTER" prefHeight="230.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.AddInvoiceController">
    <children>
-      <Label text="Add invoice to database">
+      <Label fx:id="invoiceTitle" text="Add invoice to database">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
+      <Label fx:id="invoiceIdLabel" />
       <TextField fx:id="invoiceCustomer" alignment="CENTER" maxWidth="150.0" promptText="Customer Id" />
       <TextField fx:id="invoiceDate" alignment="CENTER" maxWidth="150.0" promptText="Date (dd.mm.yyyy)" />
       <Button fx:id="invoiceAdd" mnemonicParsing="false" onAction="#addInvoice" text="Submit" />

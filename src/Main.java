@@ -37,10 +37,10 @@ public class Main extends Application{
         for (Customer u : customers){
             System.out.println(u.getName());
         }
-
+        // TODO mebe fix this sometime
         List<Invoice> invoices = InvoiceDAO.getInstance().getAllInvoices();
         for (Invoice i : invoices){
-            System.out.println(i.getCustomer().getName());
+            System.out.println(i.getCustomerId());
         }
 
         launch(args);

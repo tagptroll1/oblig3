@@ -8,9 +8,14 @@
 
 <VBox alignment="CENTER" prefHeight="230.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.AddAddressController">
    <children>
-      <Label text="Add address to database">
+      <Label fx:id="addressTitle" text="Add address to database">
          <font>
             <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="addressIdLabel">
+         <font>
+            <Font size="15.0" />
          </font>
       </Label>
       <TextField fx:id="addressStreetNumber" alignment="CENTER" maxWidth="150.0" promptText="Street number" />

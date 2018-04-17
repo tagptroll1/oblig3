@@ -8,7 +8,7 @@
 
 <VBox alignment="CENTER" prefHeight="230.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.AddInvoiceItemController">
    <children>
-      <Label text="Add invoice item to database">
+      <Label fx:id="invoiceItemTitle" text="Add invoice item to database">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>

@@ -8,10 +8,11 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class Faktura{
 
-    public void display(Invoice faktura) throws IOException {
+    public void display(Invoice faktura) throws IOException, SQLException {
         Stage window = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../Ui/faktura.fxml"));
         Parent root = loader.load();

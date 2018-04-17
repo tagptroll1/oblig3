@@ -1,12 +1,15 @@
 package Controllers;
 
+import Code.Customer;
 import Code.Invoice;
 import Code.Item;
+import DAOs.CustomerDAO;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -48,8 +51,11 @@ public class FakturaController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {}
 
     @FXML
-    public void setValues(Invoice faktura){
+    public void setValues(Invoice faktura) throws SQLException {
+
+        // TODO recreate Factura og hent data basert på faktura/invoice referanser
         double totalPrice = round(faktura.getTotal(),2);
+        Customer customer = CustomerDAO.getInstance().getUserById(faktura.getCustomerId());
 
         if (faktura.getCreated() == null){
             Date date = new Date();
@@ -57,12 +63,12 @@ public class FakturaController implements Initializable {
         } else {
             currentDate.setText(faktura.getCreated());
         }
-        customerID.setText(faktura.getCustomer().getId() + "");
+        customerID.setText(faktura.getCustomerId() + "");
         invoiceID.setText(faktura.getId() + "");
         invoiceDue1.setText(faktura.getDue());
         invoiceDue2.setText(faktura.getDue());
-        labelBilling.setText(faktura.getCustomer().getBilling());
-        labelPaidBy.setText(faktura.getCustomer().getName());
+        labelBilling.setText(customer.getBilling());
+        labelPaidBy.setText(customer.getName());
 
         if (faktura.hasItems()) {
             double totalWMVA = round(totalPrice*1.25, 2);
@@ -85,7 +91,6 @@ public class FakturaController implements Initializable {
                 itemsMVA.getChildren().add(mva);
                 itemsPrice.getChildren().add(price);
 
-
             }
         } else {
             gridMVA.setText("0.00");
@@ -95,8 +100,9 @@ public class FakturaController implements Initializable {
             labelOre.setText("00");
         }
 
-        char[] bill = faktura.getCustomer().getBilling().toCharArray();
-        if (bill.length == 11) {
+
+        char[] bill = customer.getBilling().toCharArray();
+        if (bill.length >= 11) {
             digit1.setText(Character.toString(bill[0]));
             digit2.setText(Character.toString(bill[1]));
             digit3.setText(Character.toString(bill[2]));

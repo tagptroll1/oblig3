@@ -1,6 +1,5 @@
 package Stages;
 
-import Controllers.dbViewerController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -14,7 +13,6 @@ public class dbViewerWindow {
         Stage window = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../Ui/dbViewer.fxml"));
         Parent root = loader.load();
-        dbViewerController controller = loader.getController();
 
         window.initModality(Modality.APPLICATION_MODAL);
 

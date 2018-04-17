@@ -1,34 +1,35 @@
 package Code;
 
-public class Category {
-    // TODO User SimpleXProperty
-    private int id;
-    private String name;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 
-    public Category(){}
+public class Category {
+    private final SimpleIntegerProperty id;
+    private final SimpleStringProperty name;
+
 
     public Category(String name){
-        this.id = -1;
-        this.name = name;
+        this.id = new SimpleIntegerProperty(-1);
+        this.name = new SimpleStringProperty(name);
     }
     public Category(int id, String name) {
-        this.id = id;
-        this.name = name;
+        this.id = new SimpleIntegerProperty(id);
+        this.name = new SimpleStringProperty(name);
     }
 
     public int getId() {
-        return id;
+        return id.get();
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.id.set(id);
     }
 
     public String getName() {
-        return name;
+        return name.get();
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name.set(name);
     }
 }

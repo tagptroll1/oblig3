@@ -3,11 +3,10 @@ package DAOs;
 import Code.Category;
 import Errors.QueryError;
 import Interface.CategoryDAOIF;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-
 import static Code.Utility.checkTable;
 
 public class CategoryDAO implements CategoryDAOIF {
@@ -23,25 +22,23 @@ public class CategoryDAO implements CategoryDAOIF {
         return CDAO;
     }
 
-    public boolean validateId(int id) {
+    public boolean validateId(int id) throws SQLException {
         getInstance();
         Connection con = ConnectionDAO.getInstance().getConnection();
 
-        try {
-            Statement state = con.createStatement();
 
-            String sql = "SELECT category_id FROM category WHERE category_id=" + id;
-            ResultSet result = state.executeQuery(sql);
+        Statement state = con.createStatement();
 
-            result.next();
-            if (result.getRow() != 0) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (SQLException e){
+        String sql = "SELECT category_id FROM category WHERE category_id=" + id;
+        ResultSet result = state.executeQuery(sql);
+
+        result.next();
+        if (result.getRow() != 0) {
             return false;
+        } else {
+            return true;
         }
+
     }
 
     @Override
@@ -70,10 +67,10 @@ public class CategoryDAO implements CategoryDAOIF {
         result.next();
         if (result.getRow()==0) throw new QueryError("No result found within customer table with id: "+id);
 
-        Category category = new Category();
-        category.setId(result.getInt("category_id"));
-        category.setName(result.getString("category_name"));
-        return category;
+        return new Category(
+                result.getInt("category_id"),
+                result.getString("category_name")
+        );
     }
 
     @Override
@@ -88,11 +85,10 @@ public class CategoryDAO implements CategoryDAOIF {
     }
 
     @Override
-    public List<Category> getAllCategories() throws SQLException {
-        //TODO return observableList
+    public ObservableList<Category> getAllCategories() throws SQLException {
         getInstance();
 
-        List<Category> categories = new ArrayList<>();
+        ObservableList<Category> categories = FXCollections.observableArrayList();
         Connection con = ConnectionDAO.getInstance().getConnection();
 
         Statement state = con.createStatement();

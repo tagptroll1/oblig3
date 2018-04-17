@@ -1,86 +1,80 @@
 package Code;
+
+import DAOs.AddressDAO;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+
+import java.sql.SQLException;
+
 /**
  * Class representing a given user
  */
 public class Customer {
-    // TODO User SimpleXProperty
-
-    private int id;
-    private String name;
-    private int addressId;
-    private String phone;
-    private String billing;
-    private String address;
+    private SimpleIntegerProperty id;
+    private SimpleStringProperty name;
+    private SimpleIntegerProperty addressId;
+    private SimpleStringProperty phone;
+    private SimpleStringProperty billing;
 
     public Customer(String name, int address, String phone, String billing){
-        this.id = -1;
-        this.name = name;
-        this.addressId = address;
-        this.address = getAddress();
-        this.phone = phone;
-        this.billing = billing;
+        this.id = new SimpleIntegerProperty(-1);
+        this.name = new SimpleStringProperty(name);
+        this.addressId = new SimpleIntegerProperty(address);
+        this.phone = new SimpleStringProperty(phone);
+        this.billing = new SimpleStringProperty(billing);
     }
 
     public Customer(int id, String name, int address, String phone, String billing){
-        this.id = id;
-        this.name = name;
-        this.addressId = address;
-        this.address = getAddress();
-        this.phone = phone;
-        this.billing = billing;
+        this.id = new SimpleIntegerProperty(id);
+        this.name = new SimpleStringProperty(name);
+        this.addressId = new SimpleIntegerProperty(address);
+        this.phone = new SimpleStringProperty(phone);
+        this.billing = new SimpleStringProperty(billing);
     }
     public Customer(){}
     // GETTERS AND SETTERS:
 
 
     public String getName() {
-        return name;
+        return name.get();
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name.set(name);
     }
 
     public int getAddressId() {
-        return addressId;
+        return addressId.get();
     }
 
     public void setAddressId(int addressId) {
-        this.addressId = addressId;
+        this.addressId.set(addressId);
     }
 
     public String getPhone() {
-        return phone;
+        return phone.get();
     }
 
     public void setPhone(String phone) {
-        this.phone = phone;
+        this.phone.set(phone);
     }
 
     public String getBilling() {
-        return billing;
+        return billing.get();
     }
 
     public void setBilling(String billing) {
-        this.billing = billing;
+        this.billing.set(billing);
     }
 
     public int getId() {
-        return id;
+        return id.get();
     }
 
     public void setId(int id) {
-        this.id = id;
-        setAddressId(id);
+        this.id.set(id);
     }
-    public void setAddress(String adr){
-       this.address = adr;
-    }
-    public String getAddress(){
-        return this.address;
-    }
-    public void setAddressById(int id){
 
-    }
+
 
 }

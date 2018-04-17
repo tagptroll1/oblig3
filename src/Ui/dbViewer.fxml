@@ -2,7 +2,6 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -15,14 +14,21 @@
          <children>
             <Rectangle fill="#8d8d8d" height="32.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="640.0" />
             <Rectangle fill="#cdcdcd" height="35.0" layoutY="29.0" stroke="#c3c0c0" strokeType="INSIDE" width="640.0" AnchorPane.topAnchor="29.0" />
-            <HBox alignment="CENTER" layoutY="29.0" prefHeight="35.0" prefWidth="640.0" AnchorPane.topAnchor="29.0">
+            <HBox alignment="CENTER_LEFT" layoutY="29.0" prefHeight="35.0" prefWidth="640.0" AnchorPane.topAnchor="29.0">
                <children>
-                  <Button fx:id="dbAddress" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Address" onAction="#dbGoAddress" />
-                  <Button fx:id="dbCategory" layoutX="304.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Category" onAction="#dbGoCategory"/>
-                  <Button fx:id="dbCustomer" layoutX="278.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Customer" onAction="#dbGoCustomer"/>
-                  <Button fx:id="dbInvoice" layoutX="252.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Invoice" onAction="#dbGoInvoice"/>
-                  <Button fx:id="dbInvoiceItem" layoutX="226.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Invoice item" onAction="#dbGoInvoiceItem"/>
-                  <Button fx:id="dbProduct" layoutX="200.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Product" onAction="#dbGoProduct"/>
+                  <Button fx:id="dbAddress" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#dbGoAddress" text="Address" />
+                  <Button fx:id="dbCategory" layoutX="304.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#dbGoCategory" text="Category" />
+                  <Button fx:id="dbCustomer" layoutX="278.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#dbGoCustomer" text="Customer" />
+                  <Button fx:id="dbInvoice" layoutX="252.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#dbGoInvoice" text="Invoice" />
+                  <Button fx:id="dbInvoiceItem" layoutX="226.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#dbGoInvoiceItem" text="Invoice item" />
+                  <Button fx:id="dbProduct" layoutX="200.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#dbGoProduct" text="Product" />
+                  <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Button fx:id="dbBtnAdd" maxHeight="1.7976931348623157E308" mnemonicParsing="false" text="Add" />
+                        <Button fx:id="dbBtnEdit" maxHeight="1.7976931348623157E308" mnemonicParsing="false" text="Edit" />
+                        <Button fx:id="dbBtnDel" maxHeight="1.7976931348623157E308" mnemonicParsing="false" text="Delete" />
+                     </children>
+                  </HBox>
                </children>
             </HBox>
             <Label layoutX="262.0" layoutY="4.0" text="Database viewer" AnchorPane.topAnchor="4.0">

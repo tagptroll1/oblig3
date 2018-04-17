@@ -1,13 +1,12 @@
 package DAOs;
 
-import Code.Category;
 import Code.Item;
 import Errors.QueryError;
 import Interface.ProductDAOIF;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 import static Code.Utility.checkTable;
 
@@ -36,7 +35,7 @@ public class ProductDAO implements ProductDAOIF {
         state.setString(2, item.getName());
         state.setString(3, item.getDescription());
         state.setDouble(4, item.getPrice());
-        state.setInt(5, item.getCategory().getId());
+        state.setInt(5, item.getCategoryId());
         state.execute();
         System.out.println("Added: "+item.getName());
     }
@@ -53,13 +52,12 @@ public class ProductDAO implements ProductDAOIF {
         result.next();
         if (result.getRow()==0) throw new QueryError("No result found within product table with id: "+id);
 
-        Category category = CategoryDAO.getInstance().getCategoryById(result.getInt("category"));
         Item item = new Item(
                 result.getInt("product_id"),
                 result.getString("product_name"),
                 result.getString("description"),
                 result.getDouble("price"),
-                category
+                result.getInt("category")
         );
         return item;
     }
@@ -76,26 +74,22 @@ public class ProductDAO implements ProductDAOIF {
     }
 
     @Override
-    public List<Item> getAllProducts() throws SQLException {
-        //TODO return observableList
-
+    public ObservableList<Item> getAllProducts() throws SQLException {
         getInstance();
 
-        List<Item> products = new ArrayList<>();
+        ObservableList<Item> products = FXCollections.observableArrayList();
         Connection con = ConnectionDAO.getInstance().getConnection();
 
         Statement state = con.createStatement();
         ResultSet rs = state.executeQuery("SELECT * FROM product ORDER BY product_id");
 
         while(rs.next()){
-            Category category = CategoryDAO.getInstance().getCategoryById(rs.getInt("category"));
-
             Item item = new Item(
                     rs.getInt("product_id"),
                     rs.getString("product_name"),
                     rs.getString("description"),
                     rs.getDouble("price"),
-                    category
+                    rs.getInt("category")
             );
             products.add(item);
         }

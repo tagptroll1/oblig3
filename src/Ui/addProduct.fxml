@@ -8,11 +8,12 @@
 
 <VBox alignment="CENTER" prefHeight="230.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controllers.AddProductController">
    <children>
-      <Label text="Add product to database">
+      <Label fx:id="productTitle" text="Add product to database">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
+      <Label fx:id="productIdLabel" />
       <TextField fx:id="productName" alignment="CENTER" maxWidth="150.0" promptText="Product name" />
       <TextField fx:id="productDesc" alignment="CENTER" maxWidth="150.0" promptText="Description" />
       <TextField fx:id="productPrice" alignment="CENTER" maxWidth="150.0" promptText="Price" />

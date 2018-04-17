@@ -1,6 +1,7 @@
 package Interface;
 
 import Code.Customer;
+import javafx.collections.ObservableList;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -33,6 +34,5 @@ public interface CustomerDAOIF {
      * Fetches all users in db
      * @return list of all users in db
      */
-    //TODO return observableList
-    List<Customer> getAllUsers() throws SQLException;
+    ObservableList<Customer> getAllUsers() throws SQLException;
 }

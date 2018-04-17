@@ -3,10 +3,10 @@ package DAOs;
 import Code.Customer;
 import Errors.QueryError;
 import Interface.CustomerDAOIF;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 import static Code.Utility.checkTable;
 
@@ -51,12 +51,13 @@ public class CustomerDAO implements CustomerDAOIF {
         result.next();
         if (result.getRow()==0) throw new QueryError("No result found within customer table with id: "+id);
 
-        Customer customer = new Customer();
-        customer.setName(result.getString("customer_name"));
-        customer.setAddressId(result.getInt("address"));
-        customer.setPhone(result.getString("phone_number"));
-        customer.setBilling(result.getString("billing_account"));
-        return customer;
+        return new Customer(
+                result.getInt("customer_id"),
+                result.getString("customer_name"),
+                result.getInt("address"),
+                result.getString("phone_number"),
+                result.getString("billing_account")
+        );
     }
 
     @Override
@@ -72,12 +73,10 @@ public class CustomerDAO implements CustomerDAOIF {
     }
 
     @Override
-    public List<Customer> getAllUsers() throws SQLException {
-        //TODO return observableList
-
+    public ObservableList<Customer> getAllUsers() throws SQLException {
         getInstance();
 
-        List<Customer> customers = new ArrayList<>();
+        ObservableList<Customer> customers =FXCollections.observableArrayList();
         Connection con = ConnectionDAO.getInstance().getConnection();
 
         Statement state = con.createStatement();

@@ -1,79 +1,112 @@
 package Code;
 
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
 public class Invoice {
-    // TODO User SimpleXProperty
+    private final SimpleIntegerProperty id;
+    private final SimpleIntegerProperty customerId;
+    private final SimpleStringProperty created;
+    private SimpleStringProperty due;
+    private final SimpleDoubleProperty total;
+    private ArrayList<Item> items;
 
-    private int id;
-    private Customer customer;
-    private String created;
-    private String due;
-    private double total;
-    private List<Item> items;
 
-    public Invoice(){
-        this.total = 0;
+    public Invoice(int customerID, String due){
+        this.id = new SimpleIntegerProperty(-1);
+        this.customerId = new SimpleIntegerProperty(customerID);
+        this.due = new SimpleStringProperty(due);
+        this.created = new SimpleStringProperty(getDate());
+        this.total = new SimpleDoubleProperty(0);
         this.items = new ArrayList<>();
     }
 
-    public Invoice(Customer customer, String due){
-        this.id = -1;
-        this.customer = customer;
-        this.due = due;
-        this.total = 0.0;
+    public Invoice(int id, int customerID, String due){
+        this.id = new SimpleIntegerProperty(id);
+        this.customerId = new SimpleIntegerProperty(customerID);
+        this.due = new SimpleStringProperty(due);
+        this.created = new SimpleStringProperty(getDate());
+        this.total = new SimpleDoubleProperty(0);
         this.items = new ArrayList<>();
     }
 
-    public Invoice(int id, Customer customer, String due){
-        this.id = id;
-        this.customer = customer;
-        this.due = due;
-        this.total = 0.0;
-        this.items = new ArrayList<>();
+    public Invoice(int id, int customerID, String due, ArrayList<Item> items){
+        this.id = new SimpleIntegerProperty(id);
+        this.customerId = new SimpleIntegerProperty(customerID);
+        this.due = new SimpleStringProperty(due);
+        this.created = new SimpleStringProperty(getDate());
+        this.total = new SimpleDoubleProperty(0);
+        this.items = items;
+        updateTotal();
+    }
+
+    private String getDate(){
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        Date date = new Date();
+        return dateFormat.format(date);
     }
 
     public int getId() {
-        return id;
+        return id.get();
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.id.set(id);
     }
 
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public int getCustomerId(){
+        return customerId.get();
     }
 
     public String getCreated() {
-        return created;
+        return created.get();
     }
 
     public void setCreated(String created) {
-        this.created = created;
+        this.created.set(created);
     }
 
     public String getDue() {
-        return due;
+        return due.get();
     }
 
     public void setDue(String due) {
-        this.due = due;
+        this.due.set(due);
     }
 
-    public double getTotal(){return this.total;}
+    private void updateTotal(){
+        double temp = 0;
+        for (Item i : items){
+            temp += i.getPrice();
+        }
+        this.total.set(temp);
+    }
+
+    public double getTotal(){
+        return this.total.get();
+    }
 
     public void addItem(Item item){
         this.items.add(item);
-        this.total += item.getPrice();
+        double temp = this.total.get();
+        temp += item.getPrice();
+        this.total.set(temp);
     }
 
-    public List<Item> getItems(){
+    public void removeItem(Item item){
+        this.items.remove(item);
+        double temp = this.total.get();
+        temp -= item.getPrice();
+        this.total.set(temp);
+    }
+
+    public ArrayList<Item> getItems(){
         return this.items;
     }
 

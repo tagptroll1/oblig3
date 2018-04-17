@@ -1,72 +1,52 @@
 package Controllers;
 
 import Code.Invoice;
-import Code.Item;
 import DAOs.InvoiceDAO;
-import DAOs.ProductDAO;
-import Errors.QueryError;
 import Stages.*;
-import javafx.event.ActionEvent;
-
 import java.io.IOException;
 import java.sql.SQLException;
 
 
 public class StartpageXml {
-   public void openFaktura(ActionEvent e){
+   public void openFaktura(){
         Faktura fak = new Faktura();
-        Invoice faktura = new Invoice();
-        InvoiceDAO IDAO = InvoiceDAO.getInstance();
-        try {
-            faktura = IDAO.getInvoiceById(1);
-        } catch (SQLException e1) {
-            e1.printStackTrace();
-        }
-        try {
-            Item aItem = ProductDAO.getInstance().getProductById(1);
-            Item bItem = ProductDAO.getInstance().getProductById(2);
-            faktura.addItem(aItem);
-            faktura.addItem(bItem);
-        } catch (SQLException | QueryError e1) {
-            e1.printStackTrace();
-        }
-
 
         try {
+            Invoice faktura = InvoiceDAO.getInstance().getInvoiceById(1);
             fak.display(faktura);
-        } catch (IOException e1) {
+        } catch (SQLException | IOException e1) {
             e1.printStackTrace();
         }
     }
 
-    public void openDb(ActionEvent e) throws IOException {
+    public void openDb() throws IOException {
        dbViewerWindow db = new dbViewerWindow();
        db.display();
     }
 
     public void openAddCustomer() throws IOException {
         AddCustomerWindow customerWindow = new AddCustomerWindow();
-        customerWindow.display();
+        customerWindow.display("Add a customer");
     }
     public void openAddCategory() throws IOException {
         AddCategoryWindow categoryWindow = new AddCategoryWindow();
-        categoryWindow.display();
+        categoryWindow.display( "Add a category");
     }
     public void openAddAddress() throws IOException {
         AddAddressWindow addressWindow = new AddAddressWindow();
-        addressWindow.display();
+        addressWindow.display("Add an address");
     }
     public void openAddInvoice() throws IOException {
         AddInvoiceWindow invoiceWindow = new AddInvoiceWindow();
-        invoiceWindow.display();
+        invoiceWindow.display("Add an invoice");
     }
     public void openAddInvoiceItem() throws IOException {
         AddInvoiceItemWindow invoiceItemWindow = new AddInvoiceItemWindow();
-        invoiceItemWindow.display();
+        invoiceItemWindow.display("Add an invoice item");
     }
     public void openAddProduct() throws IOException {
         AddProductWindow productWindow = new AddProductWindow();
-        productWindow.display();
+        productWindow.display("Add a product");
     }
 
 }

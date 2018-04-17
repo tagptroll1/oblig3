@@ -1,14 +1,14 @@
 package DAOs;
 
-import Code.Customer;
 import Code.Invoice;
+import Code.Item;
 import Errors.QueryError;
 import Interface.InvoiceDAOIF;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
-import java.awt.*;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
 
 import static Code.Utility.checkTable;
 
@@ -34,7 +34,7 @@ public class InvoiceDAO implements InvoiceDAOIF {
         String sql = "INSERT OR REPLACE INTO invoice values(?,?,?);";
         PreparedStatement state = con.prepareStatement(sql);
         if (invoice.getId() != -1) state.setInt(1, invoice.getId());
-        state.setInt(2, invoice.getCustomer().getId());
+        state.setInt(2, invoice.getCustomerId());
         state.setString(3, invoice.getDue());
         state.execute();
         System.out.println("Added: Invoice to db");
@@ -53,16 +53,34 @@ public class InvoiceDAO implements InvoiceDAOIF {
         result.next();
         if (result.getRow()==0) throw new QueryError("No result found within invoice table with id: "+id);
 
-        Invoice invoice = new Invoice();
-        invoice.setId(result.getInt("invoice_id"));
-        invoice.setDue(result.getString("dato"));
-
         String sql2 = "SELECT a.customer_id FROM invoice i INNER JOIN customer a ON a.customer_id=i.customer WHERE i.invoice_id="+id;
-        ResultSet result2 = state.executeQuery(sql2);
-        CustomerDAO UDAO = CustomerDAO.getInstance();
-        Customer customer = UDAO.getUserById(result2.getInt("customer_id"));
-        invoice.setCustomer(customer);
-        return invoice;
+        Statement state2 = con.createStatement();
+        ResultSet result2 = state2.executeQuery(sql2);
+
+        ArrayList<Item> items = new ArrayList<>();
+
+        String qItems = "SELECT product.product_id "
+                + "FROM invoice "
+                + "INNER JOIN invoice_items "
+                + "INNER JOIN product "
+                + "ON invoice.invoice_id=invoice_items.invoice "
+                + "AND invoice_items.product=product.product_id "
+                + "WHERE invoice_id="+id;
+        Statement itemState = con.createStatement();
+        ResultSet itemResult = itemState.executeQuery(qItems);
+
+        while(itemResult.next()){
+            items.add(ProductDAO.getInstance().getProductById(itemResult.getInt(1)));
+        }
+
+        return new Invoice(
+                result.getInt("invoice_id"),
+                result2.getInt("customer_id"),
+                result.getString("dato"),
+                items
+        );
+
+
     }
 
     @Override
@@ -78,11 +96,8 @@ public class InvoiceDAO implements InvoiceDAOIF {
     }
 
     @Override
-    public List<Invoice> getAllInvoices() throws SQLException {
-        //TODO return observableList
-        //TODO fix this, finner ikke "invoice_id"
-        List<Invoice> voices = new ArrayList<>();
-        CustomerDAO UDAO = CustomerDAO.getInstance();
+    public ObservableList<Invoice> getAllInvoices() throws SQLException {
+        ObservableList<Invoice> voices = FXCollections.observableArrayList();
         Connection con = ConnectionDAO.getInstance().getConnection();
 
         Statement state = con.createStatement();
@@ -91,18 +106,9 @@ public class InvoiceDAO implements InvoiceDAOIF {
         while(rs.next()){
             Invoice in = new Invoice(
                     rs.getInt("invoice_id"),
-                    new Customer(),
+                    rs.getInt("customer"),
                     rs.getString("dato")
             );
-
-            String sql2 = "SELECT a.customer_id "
-                    +"FROM invoice i "
-                    +"INNER JOIN customer a ON a.customer_id=i.customer "
-                    +"WHERE i.invoice_id="+rs.getInt("invoice_id");
-            Statement state2 = con.createStatement();
-            ResultSet result2 = state2.executeQuery(sql2);
-            Customer customer = UDAO.getUserById(result2.getInt("customer_id"));
-            in.setCustomer(customer);
             voices.add(in);
         }
         return voices;

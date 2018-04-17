@@ -1,31 +1,37 @@
 package Code;
 
+import javafx.beans.property.SimpleIntegerProperty;
+
 public class InvoiceItem {
-    // TODO User SimpleXProperty
-
-    private int invoiceId;
-    private int productId;
-
-    public InvoiceItem() {}
+    private final SimpleIntegerProperty invoiceId;
+    private final SimpleIntegerProperty productId;
 
     public InvoiceItem(int invoice, int product) {
-        this.invoiceId = invoice;
-        this.productId = product;
+        this.invoiceId = new SimpleIntegerProperty(invoice);
+        this.productId = new SimpleIntegerProperty(product);
     }
 
-    public int getInvoice() {
+    public int getInvoiceId() {
+        return invoiceId.get();
+    }
+
+    public SimpleIntegerProperty invoiceIdProperty() {
         return invoiceId;
     }
 
-    public void setInvoice(int invoice) {
-        this.invoiceId = invoice;
+    public void setInvoiceId(int invoiceId) {
+        this.invoiceId.set(invoiceId);
     }
 
-    public int getProduct() {
+    public int getProductId() {
+        return productId.get();
+    }
+
+    public SimpleIntegerProperty productIdProperty() {
         return productId;
     }
 
-    public void setProduct(int product) {
-        this.productId = product;
+    public void setProductId(int productId) {
+        this.productId.set(productId);
     }
 }
