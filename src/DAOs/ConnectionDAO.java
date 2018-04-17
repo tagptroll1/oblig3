@@ -1,7 +1,6 @@
 package DAOs;
 
 import Interface.ConnectionDAOIF;
-import javafx.scene.Cursor;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -19,16 +18,20 @@ public class ConnectionDAO implements ConnectionDAOIF {
         if (connection == null){
             connection = new ConnectionDAO();
         }
+
+        File db = new File("oblig3.sqlite");
+        if (!db.exists() && !db.isFile()) {
+            try {
+                createDB();
+            } catch (FileNotFoundException | SQLException e) {
+                e.printStackTrace();
+            }
+        }
         return connection;
     }
 
-    private void checkDB() throws FileNotFoundException, SQLException {
-
-        File db = new File("oblig3.sqlite");
-        if (db.exists() && db.isFile()) {
-            return;
-        }
-        checkCon();
+    private static void createDB() throws FileNotFoundException, SQLException {
+        if (con == null) getCon();
         Statement state1 = con.createStatement();
         try {
             ResultSet rs = state1.executeQuery("SELECT COUNT(*) FROM address");
@@ -53,37 +56,31 @@ public class ConnectionDAO implements ConnectionDAOIF {
         }
     }
 
-    private void checkCon(){
-        if (con == null){
-            try {
-                Class.forName("org.sqlite.JDBC");
-                String url = "jdbc:sqlite:oblig3.sqlite";
-                con = DriverManager.getConnection(url);
-                System.out.println("Connected to db");
-            } catch (SQLException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
+    private static void getCon(){
+        try {
+            Class.forName("org.sqlite.JDBC");
+            String url = "jdbc:sqlite:oblig3.sqlite";
+            con = DriverManager.getConnection(url);
+            System.out.println("Opened connection");
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
+
     }
 
     @Override
-    public java.sql.Connection getConnection(){
-        try {
-            checkDB();
-        } catch (FileNotFoundException | SQLException e) {
-            e.printStackTrace();
-        }
-        checkCon();
-
+    public Connection getConnection(){
+        if (connection == null) getInstance();
+        if (con == null) getCon();
         return con;
     }
 
     @Override
-    public void closeConnection() {
-        try {
-            con.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void closeConnection() throws SQLException {
+        if (con == null) return;
+        if (con.isClosed()) return;
+        con.close();
+        con = null;
+        System.out.println("Closed connection");
     }
 }

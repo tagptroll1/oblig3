@@ -11,6 +11,7 @@ import java.sql.*;
 import static Code.Utility.checkTable;
 
 public class CustomerDAO implements CustomerDAOIF {
+    //TODO Open/close connection correctly, fix?
     private static CustomerDAO UDAO = null;
 
     private CustomerDAO(){}
@@ -30,6 +31,8 @@ public class CustomerDAO implements CustomerDAOIF {
 
         String sql = "INSERT OR REPLACE INTO customer values(?,?,?,?,?);";
         PreparedStatement state = con.prepareStatement(sql);
+        con.close();
+
         if (customer.getId() != -1) state.setInt(1, customer.getId());
         state.setString(2, customer.getName());
         state.setInt(3, customer.getAddressId());
@@ -47,6 +50,7 @@ public class CustomerDAO implements CustomerDAOIF {
 
         String sql = "SELECT * FROM customer WHERE customer_id="+id;
         ResultSet result = state.executeQuery(sql);
+        con.close();
         // sjekk at den fikk noe
         result.next();
         if (result.getRow()==0) throw new QueryError("No result found within customer table with id: "+id);
@@ -68,6 +72,8 @@ public class CustomerDAO implements CustomerDAOIF {
 
         String sql = "DELETE FROM customer WHERE customer_name LIKE ?;";
         PreparedStatement state = con.prepareStatement(sql);
+        con.close();
+
         state.setString(1, customer.getName());
         state.executeUpdate();
     }
@@ -81,6 +87,7 @@ public class CustomerDAO implements CustomerDAOIF {
 
         Statement state = con.createStatement();
         ResultSet rs = state.executeQuery("SELECT * FROM customer ORDER BY customer_id");
+        con.close();
 
         while(rs.next()){
             Customer customer = new Customer(

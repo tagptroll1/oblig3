@@ -10,7 +10,7 @@ import java.sql.*;
 import static Code.Utility.checkTable;
 
 public class CategoryDAO implements CategoryDAOIF {
-
+    //TODO Open/close connection correctly, fix?
     private static CategoryDAO CDAO = null;
 
     private CategoryDAO(){}
@@ -31,6 +31,7 @@ public class CategoryDAO implements CategoryDAOIF {
 
         String sql = "SELECT category_id FROM category WHERE category_id=" + id;
         ResultSet result = state.executeQuery(sql);
+        con.close();
 
         result.next();
         if (result.getRow() != 0) {
@@ -49,6 +50,8 @@ public class CategoryDAO implements CategoryDAOIF {
 
         String sql = "INSERT OR REPLACE INTO category values(?,?);";
         PreparedStatement state = con.prepareStatement(sql);
+        con.close();
+
         if (category.getId() != -1) state.setInt(1, category.getId());
         state.setString(2, category.getName());
         state.execute();
@@ -60,13 +63,13 @@ public class CategoryDAO implements CategoryDAOIF {
         getInstance();
         Connection con = ConnectionDAO.getInstance().getConnection();
         Statement state = con.createStatement();
+        con.close();
 
         String sql = "SELECT * FROM category WHERE category_id="+id;
         ResultSet result = state.executeQuery(sql);
         // sjekk at den fikk noe
         result.next();
         if (result.getRow()==0) throw new QueryError("No result found within customer table with id: "+id);
-
         return new Category(
                 result.getInt("category_id"),
                 result.getString("category_name")
@@ -80,6 +83,8 @@ public class CategoryDAO implements CategoryDAOIF {
 
         String sql = "DELETE FROM category WHERE category_name LIKE ?;";
         PreparedStatement state = con.prepareStatement(sql);
+        con.close();
+
         state.setString(1, category.getName());
         state.executeUpdate();
     }
@@ -93,6 +98,7 @@ public class CategoryDAO implements CategoryDAOIF {
 
         Statement state = con.createStatement();
         ResultSet rs = state.executeQuery("SELECT * FROM category ORDER BY category_id");
+        con.close();
 
         while(rs.next()){
             Category category = new Category(

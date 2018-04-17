@@ -12,7 +12,7 @@ import java.sql.*;
 import static Code.Utility.checkTable;
 
 public class InvoiceItemDAO implements InvoiceItemDAOIF {
-
+    //TODO Open/close connection correctly, fix?
     private static InvoiceItemDAO IIDAO = null;
 
     private InvoiceItemDAO(){};
@@ -32,6 +32,8 @@ public class InvoiceItemDAO implements InvoiceItemDAOIF {
 
         String sql = "INSERT OR REPLACE INTO invoice_items values(?,?);";
         PreparedStatement state = con.prepareStatement(sql);
+        con.close();
+
         if (!(iItem.getInvoiceId() != 0 && iItem.getProductId() != 0)){
             throw new InsertionError("Invoice item insertion error: one or both ids in invoice item are invalid");
         }
@@ -46,6 +48,7 @@ public class InvoiceItemDAO implements InvoiceItemDAOIF {
         getInstance();
         Connection con = ConnectionDAO.getInstance().getConnection();
         Statement state = con.createStatement();
+        con.close();
 
         String sql = "SELECT * FROM invoice_items WHERE invoice="+id;
         ResultSet result = state.executeQuery(sql);
@@ -66,6 +69,7 @@ public class InvoiceItemDAO implements InvoiceItemDAOIF {
         getInstance();
         Connection con = ConnectionDAO.getInstance().getConnection();
         Statement state = con.createStatement();
+        con.close();
 
         String sql = "SELECT * FROM invoice_items WHERE product="+id;
         ResultSet result = state.executeQuery(sql);
@@ -84,9 +88,10 @@ public class InvoiceItemDAO implements InvoiceItemDAOIF {
     public void deleteInvoiceItem(InvoiceItem iItem) throws SQLException {
         getInstance();
         Connection con = ConnectionDAO.getInstance().getConnection();
-
         String sql = "DELETE FROM invoice_items WHERE invoice = ?;";
         PreparedStatement state = con.prepareStatement(sql);
+        con.close();
+
         state.setInt(1, iItem.getInvoiceId());
         state.executeUpdate();
     }
@@ -100,6 +105,7 @@ public class InvoiceItemDAO implements InvoiceItemDAOIF {
 
         Statement state = con.createStatement();
         ResultSet rs = state.executeQuery("SELECT * FROM invoice_items ORDER BY invoice");
+        con.close();
 
         while(rs.next()){
             InvoiceItem iItem = new InvoiceItem(

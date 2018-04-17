@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import static Code.Utility.checkTable;
 
 public class InvoiceDAO implements InvoiceDAOIF {
+    //TODO Open/close connection correctly, fix?
     private static InvoiceDAO IDAO = null;
 
     private InvoiceDAO(){}
@@ -33,6 +34,8 @@ public class InvoiceDAO implements InvoiceDAOIF {
 
         String sql = "INSERT OR REPLACE INTO invoice values(?,?,?);";
         PreparedStatement state = con.prepareStatement(sql);
+        con.close();
+
         if (invoice.getId() != -1) state.setInt(1, invoice.getId());
         state.setInt(2, invoice.getCustomerId());
         state.setString(3, invoice.getDue());
@@ -68,6 +71,7 @@ public class InvoiceDAO implements InvoiceDAOIF {
                 + "WHERE invoice_id="+id;
         Statement itemState = con.createStatement();
         ResultSet itemResult = itemState.executeQuery(qItems);
+        con.close();
 
         while(itemResult.next()){
             items.add(ProductDAO.getInstance().getProductById(itemResult.getInt(1)));
@@ -91,6 +95,8 @@ public class InvoiceDAO implements InvoiceDAOIF {
 
         String sql = "DELETE FROM invoice WHERE invoice_id = ?;";
         PreparedStatement state = con.prepareStatement(sql);
+        con.close();
+
         state.setInt(1, invoice.getId());
         state.executeUpdate();
     }
@@ -102,6 +108,7 @@ public class InvoiceDAO implements InvoiceDAOIF {
 
         Statement state = con.createStatement();
         ResultSet rs = state.executeQuery("SELECT * FROM invoice ORDER BY invoice_id");
+        con.close();
 
         while(rs.next()){
             Invoice in = new Invoice(

@@ -1,6 +1,8 @@
 package Interface;
 
 import java.sql.Connection;
+import java.sql.SQLException;
+
 /**
  * Establishes a connection to the database and provides this connection
  * through a public method.
@@ -16,5 +18,5 @@ public interface ConnectionDAOIF {
     /**
      * Closes the db connection
      */
-    public void closeConnection();
+    public void closeConnection() throws SQLException;
 }

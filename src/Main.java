@@ -26,23 +26,6 @@ public class Main extends Application{
     }
 
     public static void main(String[] args) throws SQLException {
-        CustomerDAO UDAO = CustomerDAO.getInstance();
-
-        List<Address> addresses = AddressDAO.getInstance().getAllAddresses();
-        for (Address a : addresses){
-            System.out.println(a.getStreetName());
-        }
-
-        List<Customer> customers = UDAO.getAllUsers();
-        for (Customer u : customers){
-            System.out.println(u.getName());
-        }
-        // TODO mebe fix this sometime
-        List<Invoice> invoices = InvoiceDAO.getInstance().getAllInvoices();
-        for (Invoice i : invoices){
-            System.out.println(i.getCustomerId());
-        }
-
         launch(args);
 
         ConnectionDAO.getInstance().closeConnection();
