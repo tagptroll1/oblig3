@@ -63,9 +63,11 @@
             <!--<TableView fx:id="dbTable" prefHeight="314.0" prefWidth="640.0" />-->
             <HBox alignment="CENTER" prefHeight="32.0" prefWidth="640.0" spacing="10.0" AnchorPane.bottomAnchor="0.0">
                <children>
+                  <!--
                   <Button fx:id="dbPrev" mnemonicParsing="false" onAction="#dbPrevPage" text="&lt;&lt;" />
                   <Label fx:id="dbPage" text="0" />
                   <Button fx:id="dbNext" mnemonicParsing="false" onAction="#dbNextPage" text="&gt;&gt;" />
+                  -->
                </children>
             </HBox>
          </children>

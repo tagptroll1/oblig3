@@ -130,10 +130,11 @@ public class InvoiceItemDAO implements InvoiceItemDAOIF {
     public void deleteInvoiceItem(InvoiceItem iItem){
         try {
             getInstance();
-            String sql = "DELETE FROM invoice_items WHERE invoice = ?;";
+            String sql = "DELETE FROM invoice_items WHERE invoice = ? AND product = ?;";
             PreparedStatement prpState = con.prepareStatement(sql);
 
             prpState.setInt(1, iItem.getInvoiceId());
+            prpState.setInt(2, iItem.getProductId());
             prpState.executeUpdate();
 
             closeConnections(prpState);

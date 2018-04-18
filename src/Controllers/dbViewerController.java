@@ -72,20 +72,22 @@ public class dbViewerController implements Initializable {
     /**
      * Unused function to change page
      */
+    /*
     public void dbNextPage(){
     this.currentPage++;
     }
-
+*/
     /**
      * unsused function to change page
      */
+    /*
     public void dbPrevPage(){
     if (this.currentPage <= 1){
         this.currentPage = 1;
     } else {
         currentPage--;
     }
-    }
+    }*/
 
     /**
      * Deletes the current tableView if there are more than 3 children in the anchorpane
