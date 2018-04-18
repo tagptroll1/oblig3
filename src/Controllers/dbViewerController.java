@@ -412,7 +412,6 @@ public class dbViewerController implements Initializable {
      * @throws SQLException
      */
     public void dbGoInvoiceItem() throws SQLException {
-        //TODO Doesn't have id.. maybe add? or multiple relations
         removeDB();
         ObservableList<InvoiceItem> invoiceItems = InvoiceItemDAO.getInstance().getAllInvoiceItems();
         TableView<InvoiceItem> dbTable = new TableView<>();
