@@ -20,6 +20,11 @@ public class AddAddressController {
     private int id;
     private dbViewerController database;
 
+    /**
+     * Interface controller to create an address objects from textfield data
+     * sends to AddressDAO to database storage
+     * @throws SQLException
+     */
     public void addAddress() throws SQLException {
 
         String streetN = addressStreetNumber.getText();
@@ -45,6 +50,13 @@ public class AddAddressController {
 
     }
 
+    /**
+     * Custom controller function to load insertion window with either "Auto ID" for adding inputs
+     * or shows existing id of input that's being edited
+     * @param address object selected from db, if any
+     * @param db databaseController to select which table to show
+     * @param title Title of the window
+     */
     public void setOptionalId(Address address, dbViewerController db, String title){
         if (address==null){
             addressIdLabel.setText("Auto ID");

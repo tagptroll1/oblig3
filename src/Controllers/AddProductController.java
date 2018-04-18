@@ -19,6 +19,10 @@ public class AddProductController {
     private dbViewerController database;
     private int id;
 
+    /**
+     * Grabs data from UI to store in db
+     * @throws SQLException
+     */
     public void addProduct() throws SQLException {
         String name = productName.getText();
         String desc = productDesc.getText();
@@ -56,6 +60,13 @@ public class AddProductController {
         }
     }
 
+    /**
+     * Custom controller function to load insertion window with either "Auto ID" for adding inputs
+     * or shows existing id of input that's being edited
+     * @param product object selected from db, if any
+     * @param db databaseController to select which table to show
+     * @param title Title of the window
+     */
     public void setOptionalId(Item product, dbViewerController db, String title){
         if (product==null){
             productIdLabel.setText("Auto ID");

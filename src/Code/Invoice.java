@@ -17,7 +17,11 @@ public class Invoice {
     private final SimpleDoubleProperty total;
     private ArrayList<Item> items;
 
-
+    /**
+     * Creates an invoice object to hold data from db
+     * @param customerID customer_id
+     * @param due date
+     */
     public Invoice(int customerID, String due){
         this.id = new SimpleIntegerProperty(-1);
         this.customerId = new SimpleIntegerProperty(customerID);
@@ -46,6 +50,7 @@ public class Invoice {
         updateTotal();
     }
 
+    //setters and getters
     private String getDate(){
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
         Date date = new Date();
@@ -80,7 +85,7 @@ public class Invoice {
         this.due.set(due);
     }
 
-    private void updateTotal(){
+    public void updateTotal(){
         double temp = 0;
         for (Item i : items){
             temp += i.getPrice();
@@ -92,12 +97,16 @@ public class Invoice {
         return this.total.get();
     }
 
+    /**
+     * Convenience s, not db related
+     */
     public void addItem(Item item){
         this.items.add(item);
         double temp = this.total.get();
         temp += item.getPrice();
         this.total.set(temp);
     }
+
 
     public void removeItem(Item item){
         this.items.remove(item);

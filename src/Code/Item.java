@@ -11,8 +11,13 @@ public class Item {
     private final SimpleDoubleProperty price;
     private final SimpleIntegerProperty categoryId;
 
-
-
+    /**
+     * Creates an item object to hold data from db
+     * @param name product_name
+     * @param description description
+     * @param price price
+     * @param categoryId category
+     */
     public Item(String name, String description, double price, int categoryId) {
         this.id = new SimpleIntegerProperty(-1);
         this.name = new SimpleStringProperty(name);
@@ -29,6 +34,9 @@ public class Item {
         this.categoryId = new SimpleIntegerProperty(categoryId);
     }
 
+    /*
+    Setters and getters
+     */
     public int getCategoryId() {
         return categoryId.get();
     }

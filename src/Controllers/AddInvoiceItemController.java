@@ -16,6 +16,10 @@ public class AddInvoiceItemController {
     @FXML private Label invoiceItemTitle;
     private dbViewerController database;
 
+    /**
+     * Grabs data from UI to store in Db
+     * @throws SQLException
+     */
     public void addInvoiceItem() throws SQLException {
         if ((invoiceItemProductId.getText() == null || invoiceItemProductId.getText().trim().isEmpty())
                 || (invoiceItemInvoiceId.getText() == null || invoiceItemInvoiceId.getText().trim().isEmpty())){
@@ -38,6 +42,14 @@ public class AddInvoiceItemController {
         stage.close();
 
     }
+
+    /**
+     * Custom controller function to load insertion window with either "Auto ID" for adding inputs
+     * or shows existing id of input that's being edited
+     * @param invoiceItem object selected from db, if any
+     * @param db databaseController to select which table to show
+     * @param title Title of the window
+     */
     public void setOptionalId(InvoiceItem invoiceItem, dbViewerController db, String title){
         if (invoiceItem!=null){
             invoiceItemInvoiceId.setText(invoiceItem.getInvoiceId() + "");

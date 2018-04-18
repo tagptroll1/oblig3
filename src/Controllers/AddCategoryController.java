@@ -17,6 +17,10 @@ public class AddCategoryController {
     private dbViewerController database;
     private int id;
 
+    /**
+     * Grabs data from UI to send to DAO for db storage
+     * @throws SQLException
+     */
     public void addCategory() throws SQLException {
         String name = categoryName.getText();
         if(name!=null && !name.trim().isEmpty()){
@@ -34,6 +38,13 @@ public class AddCategoryController {
 
     }
 
+    /**
+     * Custom controller function to load insertion window with either "Auto ID" for adding inputs
+     * or shows existing id of input that's being edited
+     * @param category object selected from db, if any
+     * @param db databaseController to select which table to show
+     * @param title Title of the window
+     */
     public void setOptionalId(Category category, dbViewerController db, String title){
         if (category==null){
             categoryIdLabel.setText("Auto ID");

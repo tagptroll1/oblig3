@@ -7,7 +7,10 @@ public class Category {
     private final SimpleIntegerProperty id;
     private final SimpleStringProperty name;
 
-
+    /**
+     * Creates a Category object to hold db data
+     * @param name category_name
+     */
     public Category(String name){
         this.id = new SimpleIntegerProperty(-1);
         this.name = new SimpleStringProperty(name);
@@ -17,6 +20,7 @@ public class Category {
         this.name = new SimpleStringProperty(name);
     }
 
+    // Setters and getters
     public int getId() {
         return id.get();
     }

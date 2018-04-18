@@ -11,28 +11,29 @@ import java.util.List;
  */
 public interface CustomerDAOIF {
     /**
-     * Inserts a given customer into db
-     * @param customer object to insert
+     * Breaks down an object into fields ands stores them in the database
+     * @param customer object to be broken down
      */
     void addUser(Customer customer) throws SQLException;
 
     /**
-     * Fetches a given user from db by id
-     * @param id of user to get
-     * @return Customer object of user with given id
+     * Queries database for id, fetches row with id in given database
+     * Creates an Object of related class with rows from query
+     * @param id id to be querried
+     * @return a customer object
      */
-    Customer getUserById(int id) throws SQLException;
+    Customer getUserById(int id);
 
     /**
-     * Receives a given customer object and deletes the customer
-     * from db. (hint: du kan bruke brukerens id i delete query)
-     * @param customer to delete
+     * Fetches id from object parameter, queries db with id and deletes row given
+     * @param customer object that holds id
      */
-    void deleteUser(Customer customer) throws SQLException;
+    void deleteUser(Customer customer);
 
     /**
-     * Fetches all users in db
-     * @return list of all users in db
+     * Querries all rows in said category, iterates over every row and fetches all columns
+     * uses columns to create new Objects and stores them in an observablelist
+     * @return An observable list used for db display/iterations
      */
-    ObservableList<Customer> getAllUsers() throws SQLException;
+    ObservableList<Customer> getAllUsers();
 }

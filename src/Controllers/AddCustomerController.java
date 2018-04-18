@@ -20,6 +20,10 @@ public class AddCustomerController {
     private dbViewerController database;
     private int id;
 
+    /**
+     * Extracts data from UI for db storage
+     * @throws SQLException
+     */
     public void addCustomer() throws SQLException {
         if (customerAddress == null || customerAddress.getText().trim().isEmpty()){
             throw new InsertionError("Address field cannot be empty!");
@@ -50,6 +54,14 @@ public class AddCustomerController {
         }
 
     }
+
+    /**
+     * Custom controller function to load insertion window with either "Auto ID" for adding inputs
+     * or shows existing id of input that's being edited
+     * @param customer object selected from db, if any
+     * @param db databaseController to select which table to show
+     * @param title Title of the window
+     */
     public void setOptionalId(Customer customer, dbViewerController db, String title){
         if (customer==null){
             customerIdLabel.setText("Auto ID");

@@ -21,6 +21,11 @@ public class InvoiceDAO implements InvoiceDAOIF {
 
     private InvoiceDAO(){}
 
+    /**
+     * Get's the instance of self, makes sure connection is open and state is open
+     * @return returns self
+     * @throws SQLException
+     */
     public static InvoiceDAO getInstance() throws SQLException {
         if (IDAO == null){
             IDAO = new InvoiceDAO();
@@ -33,6 +38,10 @@ public class InvoiceDAO implements InvoiceDAOIF {
         return IDAO;
     }
 
+    /**
+     * Breaks down an object into fields ands stores them in the database
+     * @param invoice object to be broken down
+     */
     @Override
     public void addInvoice(Invoice invoice){
         try {
@@ -46,14 +55,20 @@ public class InvoiceDAO implements InvoiceDAOIF {
             prpState.execute();
 
             System.out.println("Added: Invoice to db");
-            //closeConnections(prpState);
-            closeConnections(result, state, prpState, con);
+            closeConnections(prpState);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
+            closeConnections(result, state, con);
         }
     }
 
+    /**
+     * Queries database for id, fetches row with id in given database
+     * Creates an Object of related class with rows from query
+     * @param id id to be querried
+     * @return
+     */
     @Override
     public Invoice getInvoiceById(int id){
         ArrayList<Item> items = new ArrayList<>();
@@ -67,41 +82,32 @@ public class InvoiceDAO implements InvoiceDAOIF {
             result.next();
             if (result.getRow()==0) throw new QueryError("No result found within invoice table with id: "+id);
 
-            String qItems = "SELECT product.product_id "
-                    + "FROM invoice "
-                    + "INNER JOIN invoice_items "
-                    + "INNER JOIN product "
-                    + "ON invoice.invoice_id=invoice_items.invoice "
-                    + "AND invoice_items.product=product.product_id "
-                    + "WHERE invoice_id="+id;
-            Statement itemState = con.createStatement();
-            ResultSet itemResult = itemState.executeQuery(qItems);
-
-            while(itemResult.next()){
-                int productID = itemResult.getInt("product_id");
-                Item product = ProductDAO.getInstance().getProductById(productID);
-                items.add(product);
-            }
-
-            Invoice invoice = new Invoice(
+            Item item = new Item(
+                    1,
+                    "Test",
+                    "desc",
+                    55.99,
+                    2
+            );
+            items.add(item);
+            return new Invoice(
                     result.getInt("invoice_id"),
                     result.getInt("customer"),
                     result.getString("dato"),
                     items
             );
-            closeConnections(itemResult);
-            closeConnections(itemState);
-            closeConnections(result, state, con);
-            return invoice;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-            //throw new QueryError(e.toString());
+            throw new QueryError(e.toString());
         } finally {
+            closeConnections(result, state, con);
         }
 
     }
 
+    /**
+     * Fetches id from object parameter, queries db with id and deletes row given
+     * @param invoice object that holds id
+     */
     @Override
     public void deleteInvoice(Invoice invoice){
         try {
@@ -112,14 +118,19 @@ public class InvoiceDAO implements InvoiceDAOIF {
             prpState.setInt(1, invoice.getId());
             prpState.executeUpdate();
 
-            //closeConnections(prpState);
-            closeConnections(result, state, prpState, con);
+            closeConnections(prpState);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
+            closeConnections(result, state, con);
         }
     }
 
+    /**
+     * Querries all rows in said category, iterates over every row and fetches all columns
+     * uses columns to create new Objects and stores them in an observablelist
+     * @return An observable list used for db display/iterations
+     */
     @Override
     public ObservableList<Invoice> getAllInvoices(){
         ObservableList<Invoice> voices = FXCollections.observableArrayList();
@@ -136,11 +147,11 @@ public class InvoiceDAO implements InvoiceDAOIF {
                 );
                 voices.add(in);
             }
-            closeConnections(result, state, con);
             return voices;
         } catch (SQLException e) {
             return voices;
         } finally {
+            closeConnections(result, state, con);
         }
     }
 }

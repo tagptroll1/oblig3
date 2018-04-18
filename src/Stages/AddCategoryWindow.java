@@ -1,8 +1,6 @@
 package Stages;
 
-import Code.Address;
 import Code.Category;
-import Controllers.AddAddressController;
 import Controllers.AddCategoryController;
 import Controllers.dbViewerController;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +11,15 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+
 public class AddCategoryWindow {
+    /**
+     * Opens UI for adding categories to db
+     * @param category categories to be added
+     * @param db dbcontroller to change table according
+     * @param title Title of the UI
+     * @throws IOException
+     */
     public void display(Category category, dbViewerController db, String title) throws IOException {
         Stage window = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../Ui/addCategory.fxml"));
@@ -29,7 +35,15 @@ public class AddCategoryWindow {
         window.showAndWait();
     }
 
+    /**
+     * Overload function for a simple insertian window
+     * @param title title of the window
+     * @throws IOException
+     */
     public void display(String title) throws IOException {
         display(null, null, title);
     }
 }
+
+
+

@@ -11,6 +11,13 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class AddProductWindow {
+    /**
+     * Opens UI for adding items/products to db
+     * @param product item object to be added
+     * @param db dbcontroller to change table according
+     * @param title Title of the UI
+     * @throws IOException
+     */
     public void display(Item product, dbViewerController db, String title) throws IOException {
         Stage window = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../Ui/addProduct.fxml"));
@@ -26,6 +33,11 @@ public class AddProductWindow {
         window.showAndWait();
     }
 
+    /**
+     * Overload function for a simple insertion window
+     * @param title title of the window
+     * @throws IOException
+     */
     public void display(String title) throws IOException {
         display(null, null, title);
     }

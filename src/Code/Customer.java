@@ -1,10 +1,8 @@
 package Code;
 
-import DAOs.AddressDAO;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
-import java.sql.SQLException;
 
 /**
  * Class representing a given user
@@ -16,6 +14,13 @@ public class Customer {
     private SimpleStringProperty phone;
     private SimpleStringProperty billing;
 
+    /**
+     * Creates a Customer object to hold data from db
+     * @param name
+     * @param address
+     * @param phone
+     * @param billing
+     */
     public Customer(String name, int address, String phone, String billing){
         this.id = new SimpleIntegerProperty(-1);
         this.name = new SimpleStringProperty(name);
@@ -31,9 +36,8 @@ public class Customer {
         this.phone = new SimpleStringProperty(phone);
         this.billing = new SimpleStringProperty(billing);
     }
-    public Customer(){}
-    // GETTERS AND SETTERS:
 
+    // GETTERS AND SETTERS:
 
     public String getName() {
         return name.get();

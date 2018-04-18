@@ -11,7 +11,13 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class Faktura{
-
+    /**
+     * Displays a faktura/invoice
+     * controller sets values
+     * @param faktura invoice to be broken down for display
+     * @throws IOException
+     * @throws SQLException
+     */
     public void display(Invoice faktura) throws IOException, SQLException {
         Stage window = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../Ui/faktura2.fxml"));

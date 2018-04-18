@@ -11,9 +11,13 @@ public class Address {
     private final SimpleStringProperty postalCode;
     private final SimpleStringProperty postalTown;
 
-
-    //public Address(){}
-
+    /**
+     * Creates an Address object to hold data from DB
+     * @param streetNumber street_number
+     * @param streetName street_name
+     * @param postalCode postal_code
+     * @param postalTown postal_town
+     */
     public Address(String streetNumber, String streetName, String postalCode, String postalTown) {
         this.id = new SimpleIntegerProperty(-1);
         this.streetNumber = new SimpleStringProperty(streetNumber);
@@ -30,6 +34,7 @@ public class Address {
         this.postalTown = new SimpleStringProperty(postalTown);
     }
 
+    // Getters and setters
     public int getId() {
         return id.get();
     }

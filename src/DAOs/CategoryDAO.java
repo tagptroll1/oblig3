@@ -17,6 +17,11 @@ public class CategoryDAO implements CategoryDAOIF {
 
     private CategoryDAO(){}
 
+    /**
+     * Get's the instance of self, makes sure connection is open and state is open
+     * @return returns self
+     * @throws SQLException
+     */
     public static CategoryDAO getInstance() throws SQLException{
         if (CDAO == null){
             CDAO = new CategoryDAO();
@@ -42,16 +47,19 @@ public class CategoryDAO implements CategoryDAOIF {
             result = state.executeQuery(sql);
 
             result.next();
-            boolean value = result.getRow() != 0;
-            closeConnections(result, state, con);
-            return value;
+            return result.getRow() != 0;
         } catch (SQLException e){
             e.printStackTrace();
             return false;
         } finally {
+            closeConnections(result, state, con);
         }
     }
 
+    /**
+     * Breaks down an object into fields ands stores them in the database
+     * @param category object to be broken down
+     */
     @Override
     public void addCateory(Category category){
         try {
@@ -64,14 +72,20 @@ public class CategoryDAO implements CategoryDAOIF {
             prpState.execute();
 
             System.out.println("Added: " + category.getName());
-            //closeConnections(prpState);
-            closeConnections(result, state, prpState, con);
+            closeConnections(prpState);
         } catch (SQLException e){
             e.printStackTrace();
         } finally {
+            closeConnections(result, state, con);
         }
     }
 
+    /**
+     * Queries database for id, fetches row with id in given database
+     * Creates an Object of related class with rows from query
+     * @param id id to be querried
+     * @return
+     */
     @Override
     public Category getCategoryById(int id){
         try {
@@ -81,18 +95,21 @@ public class CategoryDAO implements CategoryDAOIF {
             // sjekk at den fikk noe
             result.next();
             if (result.getRow() == 0) throw new QueryError("No result found within customer table with id: " + id);
-            Category category = new Category(
+            return new Category(
                     result.getInt("category_id"),
                     result.getString("category_name")
             );
-            closeConnections(result, state, con);
-            return category;
         } catch (SQLException e){
             throw new QueryError("No result found within customer table with id: " + id);
         } finally {
+            closeConnections(result, state, con);
         }
     }
 
+    /**
+     * Fetches id from object parameter, queries db with id and deletes row given
+     * @param category object that holds id
+     */
     @Override
     public void deleteCategory(Category category){
         try {
@@ -103,14 +120,19 @@ public class CategoryDAO implements CategoryDAOIF {
             prpState.setString(1, category.getName());
             prpState.executeUpdate();
 
-            //closeConnections(prpState);
-            closeConnections(result, state, prpState, con);
+            closeConnections(prpState);
         } catch (SQLException e){
             e.printStackTrace();
         } finally {
+            closeConnections(result, state, con);
         }
     }
 
+    /**
+     * Querries all rows in said category, iterates over every row and fetches all columns
+     * uses columns to create new Objects and stores them in an observablelist
+     * @return An observable list used for db display/iterations
+     */
     @Override
     public ObservableList<Category> getAllCategories(){
 
@@ -126,11 +148,11 @@ public class CategoryDAO implements CategoryDAOIF {
                 );
                 categories.add(category);
             }
-            closeConnections(result, state, con);
             return categories;
         } catch (SQLException e){
             return categories;
         } finally {
+            closeConnections(result, state, con);
         }
     }
 }

@@ -11,7 +11,12 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class ConfirmationWindow {
-        public boolean display(){
+    /**
+     * Displays a custom alert window to prompt the user for a yes/no
+     * used for deletions currently
+     * @return a boolean to confirm deletion or not
+     */
+    public boolean display(){
             SimpleBooleanProperty deleteIt = new SimpleBooleanProperty(false);
             Stage window = new Stage();
 

@@ -19,6 +19,11 @@ public class InvoiceItemDAO implements InvoiceItemDAOIF {
 
     private InvoiceItemDAO(){}
 
+    /**
+     * Get's the instance of self, makes sure connection is open and state is open
+     * @return returns self
+     * @throws SQLException
+     */
     public static InvoiceItemDAO getInstance() throws SQLException {
         if (IIDAO == null){
             IIDAO = new InvoiceItemDAO();
@@ -31,7 +36,10 @@ public class InvoiceItemDAO implements InvoiceItemDAOIF {
         return IIDAO;
     }
 
-
+    /**
+     * Breaks down an object into fields ands stores them in the database
+     * @param iItem object to be broken down
+     */
     @Override
     public void addInvoiceItem(InvoiceItem iItem){
         try {
@@ -47,14 +55,20 @@ public class InvoiceItemDAO implements InvoiceItemDAOIF {
             prpState.execute();
 
             System.out.println("Added: invoice item to db");
-            //closeConnections(prpState);
-            closeConnections(result, state, prpState, con);
+            closeConnections(prpState);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
+            closeConnections(result, state, con);
         }
     }
 
+    /**
+     * Queries database for id, fetches row with id in given database
+     * Creates an Object of related class with rows from query
+     * @param id id to be querried
+     * @return an invoice object
+     */
     @Override
     public InvoiceItem getInvoiceItemByInvoiceId(int id){
         try {
@@ -71,14 +85,19 @@ public class InvoiceItemDAO implements InvoiceItemDAOIF {
                     result.getInt("product")
             );
 
-            closeConnections(result, state, con);
             return iItem;
         } catch (SQLException e) {
             throw new QueryError(e.toString());
         } finally {
+            closeConnections(result, state, con);
         }
     }
 
+    /**
+     * Fetches id from object parameter, queries db with id and deletes row given
+     * Gets row based on Product id
+     * @param id object that holds id
+     */
     @Override
     public InvoiceItem getInvoiceItemByProductId(int id){
         try {
@@ -90,19 +109,23 @@ public class InvoiceItemDAO implements InvoiceItemDAOIF {
             result.next();
             if (result.getRow()==0) throw new QueryError("No result found within category table with id: "+id);
 
-            InvoiceItem invoiceItem = new InvoiceItem(
+            return new InvoiceItem(
                     result.getInt("invoice"),
                     result.getInt("product")
             );
-            closeConnections(result, state, con);
-            return invoiceItem;
         } catch (SQLException e) {
             throw new QueryError(e.toString());
         } finally {
+            closeConnections(result, state, con);
         }
 
     }
 
+    /**
+     * Fetches id from object parameter, queries db with id and deletes row given
+     * Alternative version to #deleteInvoiceItem that gets row from Invoice id
+     * @param iItem object that holds id
+     */
     @Override
     public void deleteInvoiceItem(InvoiceItem iItem){
         try {
@@ -113,14 +136,19 @@ public class InvoiceItemDAO implements InvoiceItemDAOIF {
             prpState.setInt(1, iItem.getInvoiceId());
             prpState.executeUpdate();
 
-            //closeConnections(prpState);
-            closeConnections(result, state, prpState, con);
+            closeConnections(prpState);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
+            closeConnections(result, state, con);
         }
     }
 
+    /**
+     * Querries all rows in said category, iterates over every row and fetches all columns
+     * uses columns to create new Objects and stores them in an observablelist
+     * @return An observable list used for db display/iterations
+     */
     @Override
     public ObservableList<InvoiceItem> getAllInvoiceItems(){
         ObservableList<InvoiceItem> iItems = FXCollections.observableArrayList();

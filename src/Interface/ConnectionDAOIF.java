@@ -11,12 +11,14 @@ public interface ConnectionDAOIF {
 
     /**
      * Returns the DB connection
+     * Checks if it's closed/null before creating a new connection,
+     * else returns already open connection
      * @return DB connection
      */
-    public Connection getConnection();
+    Connection getConnection();
 
     /**
      * Closes the db connection
      */
-    public void closeConnection() throws SQLException;
+    void closeConnection() throws SQLException;
 }

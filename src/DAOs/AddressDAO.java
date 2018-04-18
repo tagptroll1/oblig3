@@ -18,6 +18,11 @@ public class AddressDAO implements AddressDAOIF {
 
     private AddressDAO(){}
 
+    /**
+     * Get's the instance of self, makes sure connection is open and state is open
+     * @return returns self
+     * @throws SQLException
+     */
     public static AddressDAO getInstance() throws SQLException {
         if (ADAO == null){
             ADAO = new AddressDAO();
@@ -29,7 +34,10 @@ public class AddressDAO implements AddressDAOIF {
         return ADAO;
     }
 
-
+    /**
+     * Breaks down an object into fields ands stores them in the database
+     * @param address object to be broken down
+     */
     @Override
     public void addAddress(Address address){
         try {
@@ -44,15 +52,21 @@ public class AddressDAO implements AddressDAOIF {
             prpState.setString(5, address.getPostalTown());
             prpState.execute();
 
-            //closeConnections(prpState);
-            closeConnections(result, state, prpState, con);
+            closeConnections(prpState);
             System.out.println("Added: Address to db");
         } catch (SQLException e){
             e.printStackTrace();
         } finally {
+            closeConnections(result, state, con);
         }
     }
 
+    /**
+     * Queries database for id, fetches row with id in given database
+     * Creates an Object of related class with rows from query
+     * @param id id to be querried
+     * @return
+     */
     @Override
     public Address getAddressById(int id){
         try{
@@ -64,21 +78,24 @@ public class AddressDAO implements AddressDAOIF {
             result.next();
             if (result.getRow()==0) throw new QueryError("No result found within address table with id: "+id);
 
-            Address address = new Address(
+            return new Address(
                     result.getInt("address_id"),
                     result.getString("street_number"),
                     result.getString("street_name"),
                     result.getString("postal_code"),
                     result.getString("postal_town")
             );
-            closeConnections(result, state, con);
-            return address;
         } catch (SQLException e){
             throw new QueryError("No result found within address table with id: "+id);
         } finally {
+            closeConnections(result, state, con);
         }
     }
 
+    /**
+     * Fetches id from object parameter, queries db with id and deletes row given
+     * @param address object that holds id
+     */
     @Override
     public void deleteAddress(Address address){
         try {
@@ -89,14 +106,19 @@ public class AddressDAO implements AddressDAOIF {
             prpState.setInt(1, address.getId());
             prpState.executeUpdate();
 
-            //closeConnections(prpState);
-            closeConnections(result, state, prpState, con);
+            closeConnections(prpState);
         } catch (SQLException e){
             e.printStackTrace();
         } finally {
+            closeConnections(result, state, con);
         }
     }
 
+    /**
+     * Querries all rows in said category, iterates over every row and fetches all columns
+     * uses columns to create new Objects and stores them in an observablelist
+     * @return An observable list used for db display/iterations
+     */
     @Override
     public ObservableList<Address> getAllAddresses(){
         ObservableList<Address> addresses = FXCollections.observableArrayList();
@@ -114,11 +136,11 @@ public class AddressDAO implements AddressDAOIF {
                 );
                 addresses.add(address);
             }
-            closeConnections(result, state, con);
             return addresses;
         } catch (SQLException e){
             return  addresses;
         } finally {
+            closeConnections(result, state, con);
         }
     }
 }

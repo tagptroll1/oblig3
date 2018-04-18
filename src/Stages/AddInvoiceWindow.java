@@ -12,6 +12,13 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class AddInvoiceWindow {
+    /**
+     * Opens UI for adding invoices to db
+     * @param invoice invoice to be added
+     * @param db dbcontroller to change table according
+     * @param title Title of the UI
+     * @throws IOException
+     */
     public void display(Invoice invoice, dbViewerController db, String title) throws IOException {
         Stage window = new Stage();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../Ui/addInvoice.fxml"));
@@ -27,6 +34,11 @@ public class AddInvoiceWindow {
         window.showAndWait();
     }
 
+    /**
+     * Overload function for a simple insertion window
+     * @param title title of the window
+     * @throws IOException
+     */
     public void display(String title) throws IOException {
         display(null, null, title);
     }

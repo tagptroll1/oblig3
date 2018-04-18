@@ -6,11 +6,19 @@ public class InvoiceItem {
     private final SimpleIntegerProperty invoiceId;
     private final SimpleIntegerProperty productId;
 
+    /**
+     * Creates an invoice object to hold data from db
+     * @param invoice invoice
+     * @param product product
+     */
     public InvoiceItem(int invoice, int product) {
         this.invoiceId = new SimpleIntegerProperty(invoice);
         this.productId = new SimpleIntegerProperty(product);
     }
 
+    /*
+    Setters and getters
+     */
     public int getInvoiceId() {
         return invoiceId.get();
     }

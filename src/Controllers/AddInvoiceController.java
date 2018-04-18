@@ -17,21 +17,24 @@ public class AddInvoiceController {
     private dbViewerController datebase;
     private int id;
 
+    /**
+     * Fetches data from UI to store in db
+     * @throws SQLException
+     */
     public void addInvoice() throws SQLException {
         String date = invoiceDate.getText();
-        String customer = invoiceCustomer.getText();
 
-        if (customer == null || customer.trim().isEmpty() ){
+        if (invoiceCustomer.getText() == null || invoiceCustomer.getText().trim().isEmpty() ){
             throw new InsertionError("Customer id cannot be empty!");
         }
-        int customerId = Integer.parseInt(customer);
-        if (customerId <= 0){
+        int customerid = Integer.parseInt(invoiceCustomer.getText());
+        if (customerid >= 0){
             throw new InsertionError("Customer Id cannot be 0!");
         }
         if(date!=null && !date.trim().isEmpty()){
             Invoice invoice = new Invoice(
                     id,
-                    customerId,
+                    customerid,
                     date
             );
             InvoiceDAO.getInstance().addInvoice(invoice);
@@ -43,6 +46,13 @@ public class AddInvoiceController {
         }
     }
 
+    /**
+     * Custom controller function to load insertion window with either "Auto ID" for adding inputs
+     * or shows existing id of input that's being edited
+     * @param invoice object selected from db, if any
+     * @param db databaseController to select which table to show
+     * @param title Title of the window
+     */
     public void setOptionalId(Invoice invoice, dbViewerController db, String title){
         if (invoice==null){
             invoiceIdLabel.setText("Auto ID");

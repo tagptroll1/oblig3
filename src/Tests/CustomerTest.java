@@ -14,7 +14,10 @@ public class CustomerTest {
     private static Customer bob;
     private static Customer merry;
     private static Customer karl;
-
+    /*
+    Started out as the start of testing, but ids got really hard to test for
+    discarded the whole test development method to review other ways
+     */
 
     @BeforeEach
     public void setupDB() throws SQLException {
@@ -28,7 +31,7 @@ public class CustomerTest {
         UDAO.addUser(karl);
     }
     @Test
-    public void testGetById() throws SQLException {
+    public void testGetById(){
         assertEquals(UDAO.getUserById(1).getPhone(), bob.getPhone());
         assertEquals(UDAO.getUserById(2).getPhone(), merry.getPhone());
         assertEquals(UDAO.getUserById(3).getPhone(), karl.getPhone());
@@ -36,7 +39,7 @@ public class CustomerTest {
     }
 
     @Test
-    public void testDeleteCustomer() throws SQLException{
+    public void testDeleteCustomer(){
         UDAO.deleteUser(bob);
         assertThrows(QueryError.class, ()-> UDAO.getUserById(1));
         UDAO.deleteUser(merry);

@@ -61,13 +61,18 @@ public class ConnectionDAO implements ConnectionDAOIF {
             Class.forName("org.sqlite.JDBC");
             String url = "jdbc:sqlite:oblig3.sqlite";
             con = DriverManager.getConnection(url);
-            System.out.println("Opened connection");
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
     }
 
+    /**
+     * Returns the DB connection
+     * Checks if it's closed/null before creating a new connection,
+     * else returns already open connection
+     * @return DB connection
+     */
     @Override
     public Connection getConnection(){
         if (connection == null) getInstance();
@@ -79,10 +84,12 @@ public class ConnectionDAO implements ConnectionDAOIF {
         return con;
     }
 
+    /**
+     * Closes the db connection if it's not closed or null
+     */
     @Override
     public void closeConnection() throws SQLException {
         if (con == null || con.isClosed()) return;
         con.close();
-        System.out.println("Closed connection");
     }
 }

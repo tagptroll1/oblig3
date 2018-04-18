@@ -16,17 +16,36 @@
             <Rectangle fill="#cdcdcd" height="35.0" layoutY="29.0" stroke="#c3c0c0" strokeType="INSIDE" width="640.0" AnchorPane.topAnchor="29.0" />
             <HBox alignment="CENTER_LEFT" layoutY="29.0" prefHeight="35.0" prefWidth="640.0" AnchorPane.topAnchor="29.0">
                <children>
-                  <Button fx:id="dbAddress" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#dbGoAddress" text="Address" />
-                  <Button fx:id="dbCategory" layoutX="304.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#dbGoCategory" text="Category" />
-                  <Button fx:id="dbCustomer" layoutX="278.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#dbGoCustomer" text="Customer" />
-                  <Button fx:id="dbInvoice" layoutX="252.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#dbGoInvoice" text="Invoice" />
-                  <Button fx:id="dbInvoiceItem" layoutX="226.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#dbGoInvoiceItem" text="Invoice item" />
-                  <Button fx:id="dbProduct" layoutX="200.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#dbGoProduct" text="Product" />
+                  <Button fx:id="dbAddress" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#dbGoAddress" text="Address">
+                     <font>
+                        <Font size="10.0" />
+                     </font></Button>
+                  <Button fx:id="dbCategory" layoutX="304.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#dbGoCategory" text="Category">
+                     <font>
+                        <Font size="10.0" />
+                     </font></Button>
+                  <Button fx:id="dbCustomer" layoutX="278.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#dbGoCustomer" text="Customer">
+                     <font>
+                        <Font size="10.0" />
+                     </font></Button>
+                  <Button fx:id="dbInvoice" layoutX="252.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#dbGoInvoice" text="Invoice">
+                     <font>
+                        <Font size="10.0" />
+                     </font></Button>
+                  <Button fx:id="dbInvoiceItem" layoutX="226.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#dbGoInvoiceItem" text="Invoice item">
+                     <font>
+                        <Font size="10.0" />
+                     </font></Button>
+                  <Button fx:id="dbProduct" layoutX="200.0" layoutY="10.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#dbGoProduct" text="Product">
+                     <font>
+                        <Font size="10.0" />
+                     </font></Button>
                   <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
                      <children>
                         <Button fx:id="dbBtnAdd" maxHeight="1.7976931348623157E308" mnemonicParsing="false" text="Add" />
                         <Button fx:id="dbBtnEdit" maxHeight="1.7976931348623157E308" mnemonicParsing="false" text="Edit" />
                         <Button fx:id="dbBtnDel" maxHeight="1.7976931348623157E308" mnemonicParsing="false" text="Delete" />
+                        <Button fx:id="dbBtnShow" layoutX="215.0" layoutY="10.0" maxHeight="1.7976931348623157E308" mnemonicParsing="false" text="Show" />
                      </children>
                   </HBox>
                </children>

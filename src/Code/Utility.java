@@ -8,6 +8,12 @@ import java.math.RoundingMode;
 import java.sql.*;
 
 public class Utility {
+    /**
+     * Rounds down to places amount of decimals
+     * @param value values to round
+     * @param places amount of decimals
+     * @return
+     */
     public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
 
@@ -16,6 +22,14 @@ public class Utility {
         return bd.doubleValue();
     }
 
+    /**
+     * Utility function to close specific connections, states and resultsets
+     * Overloaded for multipurpose
+     * @param result A ResultSet to close
+     * @param state A Statement to close
+     * @param prpState a PreparedStatement to close
+     * @param con a Connection to close
+     */
     public static void closeConnections(ResultSet result, Statement state, PreparedStatement prpState, Connection con){
         try {
             if (result != null && !result.isClosed()) try {
@@ -25,17 +39,16 @@ public class Utility {
                 state.close();
             } catch (SQLException e) {/*ignored*/}
             if (prpState != null && !prpState.isClosed()) try {
-                prpState.clearParameters();
                 prpState.close();
             } catch (SQLException e) {/*ignored*/}
-            if (!con.isClosed()) try {
+            if (con != null && !con.isClosed()) try {
                 ConnectionDAO.getInstance().closeConnection();
             } catch (SQLException e) {/*ignored*/}
         } catch (SQLException e){
             e.printStackTrace();
         }
     }
-
+    /*Overloaded versions of closeConnections*/
     public static void closeConnections(ResultSet result, Statement state, Connection con){
         closeConnections(result, state, null, con);
     }

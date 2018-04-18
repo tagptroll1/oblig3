@@ -4,8 +4,6 @@ import Code.*;
 import DAOs.*;
 import Stages.*;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -14,7 +12,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
@@ -23,10 +20,9 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class dbViewerController implements Initializable {
-    // TODO view faktura fra db viewer
-
     @FXML private AnchorPane anchorPane;
-    @FXML private Button dbBtnAdd, dbBtnEdit, dbBtnDel;
+    @FXML private Button dbBtnAdd, dbBtnEdit, dbBtnDel, dbBtnShow;
+    @FXML private Button dbAddress, dbCategory, dbCustomer, dbInvoice, dbInvoiceItem, dbProduct;
     private Address selectedAddress;
     private Customer selectedCustomer;
     private Category selectedCategory;
@@ -58,6 +54,12 @@ public class dbViewerController implements Initializable {
 
         dbBtnDel.setDisable(true);
         dbBtnEdit.setDisable(true);
+        dbBtnDel.setDisable(true);
+        Button[] buttons = {dbAddress, dbCategory, dbCustomer, dbInvoice, dbInvoiceItem, dbProduct,
+                dbBtnAdd, dbBtnEdit, dbBtnDel, dbBtnShow};
+        for (Button b : buttons){
+            b.setStyle("-fx-background-radius: 0");
+        }
 
         try {
             dbGoAddress();
@@ -67,11 +69,16 @@ public class dbViewerController implements Initializable {
     }
     private int currentPage = 1;
 
-
+    /**
+     * Unused function to change page
+     */
     public void dbNextPage(){
     this.currentPage++;
     }
 
+    /**
+     * unsused function to change page
+     */
     public void dbPrevPage(){
     if (this.currentPage <= 1){
         this.currentPage = 1;
@@ -80,6 +87,12 @@ public class dbViewerController implements Initializable {
     }
     }
 
+    /**
+     * Deletes the current tableView if there are more than 3 children in the anchorpane
+     * Hacky way to check if theres a table there or not
+     * After it deletes the table it resets all selected values to avoid wrongly deletions
+     * and sets button disability
+     */
     private void removeDB(){
         if (anchorPane.getChildren().size() >= 3){
             anchorPane.getChildren().remove(2);
@@ -93,10 +106,17 @@ public class dbViewerController implements Initializable {
         selectedInvoiceItem = null;
         selectedProduct = null;
 
+        dbBtnShow.setDisable(true);
         dbBtnEdit.setDisable(true);
         dbBtnDel.setDisable(true);
     }
 
+    /**
+     * Creates table for addresses, fetches all rows from DAO
+     * sets buttons actions to fetch correct rows and open the correct windows
+     * for edition / adding
+     * @throws SQLException
+     */
     public void dbGoAddress() throws SQLException {
         removeDB();
 
@@ -167,6 +187,12 @@ public class dbViewerController implements Initializable {
 
     }
 
+    /**
+     * Creates table for category, fetches all rows from DAO
+     * sets buttons actions to fetch correct rows and open the correct windows
+     * for edition / adding
+     * @throws SQLException
+     */
     public void dbGoCategory() throws SQLException {
         removeDB();
         ObservableList<Category> categories = CategoryDAO.getInstance().getAllCategories();
@@ -224,6 +250,12 @@ public class dbViewerController implements Initializable {
         anchorPane.getChildren().add(2, dbTable);
     }
 
+    /**
+     * Creates table for customer, fetches all rows from DAO
+     * sets buttons actions to fetch correct rows and open the correct windows
+     * for edition / adding
+     * @throws SQLException
+     */
     public void dbGoCustomer() throws SQLException {
         removeDB();
 
@@ -294,6 +326,12 @@ public class dbViewerController implements Initializable {
         anchorPane.getChildren().add(2, dbTable);
     }
 
+    /**
+     * Creates table for invoice, fetches all rows from DAO
+     * sets buttons actions to fetch correct rows and open the correct windows
+     * for edition / adding
+     * @throws SQLException
+     */
     public void dbGoInvoice() throws SQLException {
         removeDB();
 
@@ -320,6 +358,7 @@ public class dbViewerController implements Initializable {
             selectedInvoice =  invoiceTable.getSelectionModel().getSelectedItem();
             dbBtnDel.setDisable(false);
             dbBtnEdit.setDisable(false);
+            dbBtnShow.setDisable(false);
         });
 
         dbBtnDel.setOnAction(ev -> {
@@ -352,9 +391,24 @@ public class dbViewerController implements Initializable {
             }
         });
 
+        dbBtnShow.setOnAction(ev ->{
+            try {
+                Faktura faktura = new Faktura();
+                faktura.display(selectedInvoice);
+            } catch (IOException | SQLException e) {
+                e.printStackTrace();
+            }
+        });
+
         anchorPane.getChildren().add(2, invoiceTable);
     }
 
+    /**
+     * Creates table for invoice items, fetches all rows from DAO
+     * sets buttons actions to fetch correct rows and open the correct windows
+     * for edition / adding
+     * @throws SQLException
+     */
     public void dbGoInvoiceItem() throws SQLException {
         //TODO Doesn't have id.. maybe add? or multiple relations
         removeDB();
@@ -413,6 +467,12 @@ public class dbViewerController implements Initializable {
         anchorPane.getChildren().add(2, dbTable);
     }
 
+    /**
+     * Creates table for products, fetches all rows from DAO
+     * sets buttons actions to fetch correct rows and open the correct windows
+     * for edition / adding
+     * @throws SQLException
+     */
     public void dbGoProduct() throws SQLException {
         removeDB();
         ObservableList<Item> products = ProductDAO.getInstance().getAllProducts();
